@@ -15,7 +15,7 @@ function init(){
         isDebug: true
     });
 
-    document.body.appendChild(app.canvas);
+    document.body.appendChild(app.dom);
     document.addEventListener('mousemove', onDocumentMouseMove, false);
 }
 
@@ -34,7 +34,7 @@ function onDocumentMouseMove(event){
 }
 
 window.addEventListener('resize', function(){
-    app.resize(window.innerWidth, window.innerHeight);
+    app.resize();
 });
 
 window.addEventListener('keydown', function(ev){
