@@ -9,8 +9,7 @@
   },
   "dependencies": {
     "gsap": "^1.20.3",
-    "parcel-bundler": "^1.2.0",
     "stats.js": "git+ssh://git@github.com:mrdoob/stats.js.git",
-    "uil": "^1.0.1"
+    "tubugl-core": "git+ssh://git@github.com:kenjiSpecial/tubugl-core.git"
   }
 }
