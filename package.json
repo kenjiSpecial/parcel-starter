@@ -1,0 +1,19 @@
+{
+  "name": "paracel-prtotype-kit",
+  "version": "1.0.0",
+  "description": "prototype tool with parcel",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "dependencies": {
+    "gsap": "^1.20.3",
+    "parcel-bundler": "^1.2.0",
+    "parcel-plugin-inlinesvg": "./plugin",
+    "stats.js": "git+ssh://git@github.com:mrdoob/stats.js.git",
+    "three": "^0.88.0",
+    "three-orbit-controls": "^82.1.0",
+    "uil": "^1.0.1"
+  }
+}
