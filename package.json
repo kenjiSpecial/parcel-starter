@@ -13,6 +13,6 @@
     "stats.js": "git+ssh://git@github.com:mrdoob/stats.js.git",
     "three": "^0.88.0",
     "three-orbit-controls": "^82.1.0",
-    "uil": "^1.0.1"
+    "tubugl-core": "git+ssh://git@github.com:kenjiSpecial/tubugl-core.git"
   }
 }

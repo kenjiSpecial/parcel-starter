@@ -1,55 +1,80 @@
-const THREE = require('three');
-const OrbitControls = require('three-orbit-controls')(THREE);
-
 const dat = require('./vendors/dat.gui.min');
 const TweenMax = require('gsap');
 const Stats = require('stats.js');
 
-import {fragmentShader, vertexShader} from './components/shaders/shader';
+import {Program, ArrayBuffer, IndexArrayBuffer} from 'tubugl-core';
+
+const vertexShader = `// an attribute will receive data from a buffer
+  attribute vec4 a_position;
+  uniform float uTheta;
+
+  void main() {
+    gl_Position = a_position + vec4(0.0 * cos(uTheta), 0.0 * sin(uTheta), 0.0, 0.0);
+  }`;
+
+const fragmentShader = `
+  precision mediump float;
+
+  void main() {
+    float colorR = gl_FrontFacing ? 1.0 : 0.0;
+    float colorG = gl_FrontFacing ? 0.0 : 1.0;
+    
+    gl_FragColor = vec4(colorR, colorG, 0.0, 1.0);
+    
+  }
+`;
 
 
 export default class App {
-    constructor(params){
-        this.params = params || {};
-        this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
-        this.camera.position.z = 1000;
+    constructor(params = {}){
+        this._width = params.width ? params.width : window.innerWidth;
+        this._height = params.height ? params.height : window.innerHeight;
 
-        this.scene = new THREE.Scene();
+        this.canvas = document.createElement('canvas')
+        this.gl = this.canvas.getContext('webgl');
 
-        this.mesh = this.createMesh();
-        this.scene.add(this.mesh);
-
-        this.renderer = new THREE.WebGLRenderer({
-            antialias: true
-        });
-        this.dom = this.renderer.domElement;
-
-        if(this.params.isDebug){
+        if(params.isDebug){
             this.stats = new Stats();
             document.body.appendChild(this.stats.dom);
             this._addGui();
         }
 
-        this.clock = new THREE.Clock();
-        this.control = new OrbitControls(this.camera);
-
-        this.resize();
+        this._createProgram();
+        this.resize(this._width, this._height);
     }
     
     _addGui(){
         this.gui = new dat.GUI();
         this.playAndStopGui = this.gui.add(this, '_playAndStop').name('pause');
     }
-    
-    createMesh(){
-        let geometry = new THREE.BoxGeometry(200, 200, 200);
-        let mat = new THREE.RawShaderMaterial({
-            vertexShader: vertexShader,
-            fragmentShader: fragmentShader
-        });
 
-        let mesh = new THREE.Mesh(geometry, mat);
-        return mesh;
+    _createProgram(){
+        this._program = new Program(this.gl, vertexShader, fragmentShader);
+
+        let side = 1.0;
+        let vertices = new Float32Array([
+            -side/2, -side/2,
+             side/2, -side/2,
+             side/2,  side/2,
+            -side/2,  side/2,
+        ]);
+
+        let indices = new Uint16Array( [
+            0, 1, 2,
+            0, 2, 3,
+            ]);
+
+        this._arrayBuffer = new ArrayBuffer(this.gl, vertices);
+        this._arrayBuffer.setAttribs('a_position', 2, this.gl.FLOAT, false, 0, 0);
+
+        this._indexBuffer = new IndexArrayBuffer(this.gl, indices);
+
+        this._obj = {
+            program: this._program,
+            positionBuffer: this._arrayBuffer,
+            indexBuffer: this._indexBuffer,
+            count: 6
+        }
     }
 
     animateIn(){
@@ -58,15 +83,17 @@ export default class App {
     }
 
     loop(){
-        // let delta = this.clock.getDelta();
 
-        this.mesh.rotation.x += 0.01;
-        this.mesh.rotation.y += 0.02;
-
-
-        this.renderer.render(this.scene, this.camera);
         if(this.stats) this.stats.update();
 
+        this.gl.clearColor(0, 0, 0, 1);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+
+        this._obj.program.bind();
+        this._obj.indexBuffer.bind();
+        this._obj.positionBuffer.bind().attribPointer(this._obj.program);
+
+        this.gl.drawElements(this.gl.TRIANGLES, this._obj.count, this.gl.UNSIGNED_SHORT, 0 );
     }
 
     animateOut(){
@@ -97,11 +124,14 @@ export default class App {
     }
 
 
-    resize(){
-        this.camera.aspect = window.innerWidth / window.innerHeight;
-        this.camera.updateProjectionMatrix();
+    resize(width, height){
+        this._width = width;
+        this._height = height;
 
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.canvas.width = this._width;
+        this.canvas.height = this._height;
+        this.gl.viewport(0, 0, this._width, this._height);
+
     }
 
     destroy(){
