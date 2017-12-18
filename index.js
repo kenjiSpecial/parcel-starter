@@ -1,4 +1,4 @@
-const dat = require('./vendors/dat.gui.min');
+const dat = require('dat.gui/build/dat.gui.min');
 const TweenMax = require('gsap');
 const Stats = require('stats.js');
 
