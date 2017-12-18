@@ -5,11 +5,13 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "parcel index.html"
+    "start": "parcel index.html --no-hmr"
   },
   "dependencies": {
+    "dat.gui": "https://github.com/dataarts/dat.gui.git",
     "gsap": "^1.20.3",
-    "stats.js": "git+ssh://git@github.com:mrdoob/stats.js.git",
-    "tubugl-core": "git+ssh://git@github.com:kenjiSpecial/tubugl-core.git"
+    "parcel-bundler": "https://github.com/mattdesl/parcel.git#feature/add-js-reload",
+    "stats.js": "https://github.com/mrdoob/stats.js.git",
+    "tubugl-core": "https://github.com/kenjiSpecial/tubugl-core.git"
   }
 }
