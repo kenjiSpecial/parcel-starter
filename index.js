@@ -1,8 +1,8 @@
 const dat = require('dat.gui/build/dat.gui.min');
-const TweenMax = require('gsap');
+const TweenLite = require('gsap/TweenLite');
 const Stats = require('stats.js');
 
-import {Program, ArrayBuffer, IndexArrayBuffer} from 'tubugl-core';
+import { Program, ArrayBuffer, IndexArrayBuffer } from 'tubugl-core';
 
 const vertexShader = `// an attribute will receive data from a buffer
   attribute vec4 a_position;
@@ -24,118 +24,115 @@ const fragmentShader = `
   }
 `;
 
-
 export default class App {
-    constructor(params = {}){
-        this._width = params.width ? params.width : window.innerWidth;
-        this._height = params.height ? params.height : window.innerHeight;
+	constructor(params = {}) {
+		this._width = params.width ? params.width : window.innerWidth;
+		this._height = params.height ? params.height : window.innerHeight;
 
-        this.canvas = document.createElement('canvas')
-        this.gl = this.canvas.getContext('webgl');
+		this.canvas = document.createElement('canvas');
+		this.gl = this.canvas.getContext('webgl');
 
-        if(params.isDebug){
-            this.stats = new Stats();
-            document.body.appendChild(this.stats.dom);
-            this._addGui();
-        }
+		if (params.isDebug) {
+			this.stats = new Stats();
+			document.body.appendChild(this.stats.dom);
+			this._addGui();
+		}
 
-        this._createProgram();
-        this.resize(this._width, this._height);
-    }
-    
-    _addGui(){
-        this.gui = new dat.GUI();
-        this.playAndStopGui = this.gui.add(this, '_playAndStop').name('pause');
-    }
+		this._createProgram();
+		this.resize(this._width, this._height);
+	}
 
-    _createProgram(){
-        this._program = new Program(this.gl, vertexShader, fragmentShader);
+	_addGui() {
+		this.gui = new dat.GUI();
+		this.playAndStopGui = this.gui.add(this, '_playAndStop').name('pause');
+	}
 
-        let side = 1.0;
-        let vertices = new Float32Array([
-            -side/2, -side/2,
-             side/2, -side/2,
-             side/2,  side/2,
-            -side/2,  side/2,
-        ]);
+	_createProgram() {
+		this._program = new Program(this.gl, vertexShader, fragmentShader);
 
-        let indices = new Uint16Array( [
-            0, 1, 2,
-            0, 2, 3,
-            ]);
+		let side = 1.0;
+		let vertices = new Float32Array([
+			-side / 2,
+			-side / 2,
+			side / 2,
+			-side / 2,
+			side / 2,
+			side / 2,
+			-side / 2,
+			side / 2
+		]);
 
-        this._arrayBuffer = new ArrayBuffer(this.gl, vertices);
-        this._arrayBuffer.setAttribs('a_position', 2, this.gl.FLOAT, false, 0, 0);
+		let indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
 
-        this._indexBuffer = new IndexArrayBuffer(this.gl, indices);
+		this._arrayBuffer = new ArrayBuffer(this.gl, vertices);
+		this._arrayBuffer.setAttribs('a_position', 2, this.gl.FLOAT, false, 0, 0);
 
-        this._obj = {
-            program: this._program,
-            positionBuffer: this._arrayBuffer,
-            indexBuffer: this._indexBuffer,
-            count: 6
-        }
-    }
+		this._indexBuffer = new IndexArrayBuffer(this.gl, indices);
 
-    animateIn(){
-        this.isLoop = true;
-        TweenMax.ticker.addEventListener('tick', this.loop, this);
-    }
+		this._obj = {
+			program: this._program,
+			positionBuffer: this._arrayBuffer,
+			indexBuffer: this._indexBuffer,
+			count: 6
+		};
+	}
 
-    loop(){
+	animateIn() {
+		this.isLoop = true;
+		TweenLite.ticker.addEventListener('tick', this.loop, this);
+	}
 
-        if(this.stats) this.stats.update();
+	loop() {
+		if (this.stats) this.stats.update();
 
-        this.gl.clearColor(0, 0, 0, 1);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+		this.gl.clearColor(0, 0, 0, 1);
+		this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
-        this._obj.program.bind();
-        this._obj.indexBuffer.bind();
-        this._obj.positionBuffer.bind().attribPointer(this._obj.program);
+		this._obj.program.bind();
+		this._obj.indexBuffer.bind();
+		this._obj.positionBuffer.bind().attribPointer(this._obj.program);
 
-        this.gl.drawElements(this.gl.TRIANGLES, this._obj.count, this.gl.UNSIGNED_SHORT, 0 );
-    }
+		this.gl.drawElements(
+			this.gl.TRIANGLES,
+			this._obj.count,
+			this.gl.UNSIGNED_SHORT,
+			0
+		);
+	}
 
-    animateOut(){
-        TweenMax.ticker.removeEventListener('tick', this.loop, this);
-    }
+	animateOut() {
+		TweenLite.ticker.removeEventListener('tick', this.loop, this);
+	}
 
-    onMouseMove(mouse){
+	onMouseMove(mouse) {}
 
-    }
+	onKeyDown(ev) {
+		switch (ev.which) {
+			case 27:
+				this._playAndStop();
+				break;
+		}
+	}
 
-    onKeyDown(ev){
-        switch(ev.which){
-            case 27:
-                this._playAndStop();
-                break;
-        }
-    }
+	_playAndStop() {
+		this.isLoop = !this.isLoop;
+		if (this.isLoop) {
+			TweenLite.ticker.addEventListener('tick', this.loop, this);
+			this.playAndStopGui.name('pause');
+		} else {
+			TweenLite.ticker.removeEventListener('tick', this.loop, this);
+			this.playAndStopGui.name('play');
+		}
+	}
 
-    _playAndStop(){
-        this.isLoop = !this.isLoop;
-        if(this.isLoop){
-            TweenMax.ticker.addEventListener('tick', this.loop, this);
-            this.playAndStopGui.name('pause');
-        }else{
-            TweenMax.ticker.removeEventListener('tick', this.loop, this);
-            this.playAndStopGui.name('play');
-        }
-    }
+	resize(width, height) {
+		this._width = width;
+		this._height = height;
 
+		this.canvas.width = this._width;
+		this.canvas.height = this._height;
+		this.gl.viewport(0, 0, this._width, this._height);
+	}
 
-    resize(width, height){
-        this._width = width;
-        this._height = height;
-
-        this.canvas.width = this._width;
-        this.canvas.height = this._height;
-        this.gl.viewport(0, 0, this._width, this._height);
-
-    }
-
-    destroy(){
-
-    }
-
+	destroy() {}
 }
