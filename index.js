@@ -1,4 +1,1 @@
-
-export function appCall(){
-    console.log('app is called');
-}
+export { Sample } from './src/sample';
