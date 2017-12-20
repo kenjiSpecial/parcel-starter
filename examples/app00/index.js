@@ -27,6 +27,7 @@ const fragmentShader = `
 
 export default class App {
 	constructor(params = {}) {
+		this._isMouseDown = false;
 		this._width = params.width ? params.width : window.innerWidth;
 		this._height = params.height ? params.height : window.innerHeight;
 
@@ -105,7 +106,21 @@ export default class App {
 		TweenMax.ticker.removeEventListener('tick', this.loop, this);
 	}
 
-	onMouseMove(mouse) {}
+	
+	mouseMoveHandler(mouse) {
+		if (!this._isMouseDown) return;
+
+		this._prevMouse = mouse;
+	}
+
+	mouseDownHandler(mouse) {
+		this._isMouseDown = true;
+		this._prevMouse = mouse;
+	}
+
+	mouseupHandler() {
+		this._isMouseDown = false;
+	}
 
 	onKeyDown(ev) {
 		switch (ev.which) {
