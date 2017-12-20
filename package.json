@@ -5,7 +5,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "startApp0": "parcel examples/app00/index.html --no-hmr"
+    "app00": "parcel examples/app00/index.html --no-hmr"
+    "dist00": "parcel build examples/app00/index.html -d examples/dist/app0 --public-url ./",
   },
   "dependencies": {
     "dat.gui": "https://github.com/dataarts/dat.gui.git",
