@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "app00": "parcel examples/app00/index.html --no-hmr"
+    "app00": "parcel examples/app00/index.html --no-hmr",
     "dist00": "parcel build examples/app00/index.html -d examples/dist/app0 --public-url ./",
   },
   "dependencies": {
