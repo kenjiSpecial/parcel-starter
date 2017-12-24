@@ -12,6 +12,8 @@
     "dat.gui": "https://github.com/dataarts/dat.gui.git",
     "gsap": "^1.20.3",
     "stats.js": "https://github.com/mrdoob/stats.js.git",
-    "tubugl-core": "https://github.com/kenjiSpecial/tubugl-core.git"
+    "tubugl-3d-shape": "https://github.com/kenjiSpecial/tubugl-3d-shape.git",
+    "tubugl-core": "https://github.com/kenjiSpecial/tubugl-core.git",
+    "tubugl-math": "https://github.com/kenjiSpecial/tubugl-math.git"
   }
 }
