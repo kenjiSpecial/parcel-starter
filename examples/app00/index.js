@@ -94,19 +94,13 @@ export default class App {
 		this._obj.indexBuffer.bind();
 		this._obj.positionBuffer.bind().attribPointer(this._obj.program);
 
-		this.gl.drawElements(
-			this.gl.TRIANGLES,
-			this._obj.count,
-			this.gl.UNSIGNED_SHORT,
-			0
-		);
+		this.gl.drawElements(this.gl.TRIANGLES, this._obj.count, this.gl.UNSIGNED_SHORT, 0);
 	}
 
 	animateOut() {
 		TweenMax.ticker.removeEventListener('tick', this.loop, this);
 	}
 
-	
 	mouseMoveHandler(mouse) {
 		if (!this._isMouseDown) return;
 

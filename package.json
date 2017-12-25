@@ -6,15 +6,20 @@
   "license": "MIT",
   "scripts": {
     "app00": "parcel examples/app00/index.html --no-hmr",
-    "dist00": "parcel build examples/app00/index.html -d examples/dist/app0 --public-url ./"
+    "dist00": "parcel build examples/app00/index.html -d docs/app00 --public-url ./",
+    "screenshot00": "node ./node/screenshot.js --dir=app00"
   },
   "dependencies": {
-    "dat.gui": "https://github.com/dataarts/dat.gui.git",
+    "dat.gui": "^0.6.5",
     "gsap": "^1.20.3",
     "stats.js": "https://github.com/mrdoob/stats.js.git",
     "tubugl-3d-shape": "https://github.com/kenjiSpecial/tubugl-3d-shape.git",
     "tubugl-constants": "https://github.com/kenjiSpecial/tubugl-constants.git",
     "tubugl-core": "https://github.com/kenjiSpecial/tubugl-core.git",
     "tubugl-math": "https://github.com/kenjiSpecial/tubugl-math.git"
+  },
+  "devDependencies": {
+    "minimist": "^1.2.0",
+    "puppeteer": "^0.13.0"
   }
 }
