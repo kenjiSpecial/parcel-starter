@@ -9,7 +9,9 @@ module.exports = {
 		sourceType: 'module'
 	},
 	rules: {
+		'arrow-body-style': ['error', 'always'],
 		quotes: ['error', 'single'],
-		semi: ['error', 'always']
+		semi: ['error', 'always'],
+		'no-console': 'off'
 	}
 };
