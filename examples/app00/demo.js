@@ -1,16 +1,20 @@
 'use strict';
 
-import App from './index';
-// import App from './apps/OrthoApp';
+import App from './app';
+
+var urlParams = new URLSearchParams(window.location.search);
+const isDebug = !urlParams.has('NoDebug');
 
 let app;
 
-init();
-start();
+(() => {
+	init();
+	start();
+})();
 
 function init() {
 	app = new App({
-		isDebug: false
+		isDebug: isDebug
 	});
 
 	document.body.appendChild(app.canvas);
