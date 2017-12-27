@@ -3,7 +3,7 @@
 import App from './app';
 
 var urlParams = new URLSearchParams(window.location.search);
-const isDebug = !urlParams.has('NoDebug');
+const isDebug = !(urlParams.has('NoDebug') || urlParams.has('NoDebug/'));
 
 let app;
 

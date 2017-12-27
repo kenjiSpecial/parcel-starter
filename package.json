@@ -7,7 +7,8 @@
   "scripts": {
     "app00": "parcel examples/app00/index.html --no-hmr",
     "dist00": "parcel build examples/app00/index.html -d docs/app00 --public-url ./",
-    "screenshot00": "node ./node/screenshot.js --dir=app00"
+    "screenshot00": "node ./node/screenshot.js --dir=app00",
+    "docs" : "python -m SimpleHTTPServer 8000"
   },
   "dependencies": {
     "dat.gui": "^0.6.5",
