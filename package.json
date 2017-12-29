@@ -8,16 +8,16 @@
     "app00": "parcel examples/app00/index.html --no-hmr",
     "dist00": "parcel build examples/app00/index.html -d docs/app00 --public-url ./",
     "screenshot00": "node ./node/screenshot.js --dir=app00",
-    "docs" : "python -m SimpleHTTPServer 8000"
+    "docs": "python -m SimpleHTTPServer 8000"
   },
   "dependencies": {
     "dat.gui": "^0.6.5",
     "gsap": "^1.20.3",
     "stats.js": "https://github.com/mrdoob/stats.js.git",
-    "tubugl-3d-shape": "https://github.com/kenjiSpecial/tubugl-3d-shape.git",
-    "tubugl-constants": "https://github.com/kenjiSpecial/tubugl-constants.git",
-    "tubugl-core": "https://github.com/kenjiSpecial/tubugl-core.git",
-    "tubugl-math": "https://github.com/kenjiSpecial/tubugl-math.git"
+    "tubugl-3d-shape": "^1.3.0",
+    "tubugl-constants": "^1.0.3",
+    "tubugl-core": "^1.1.0",
+    "tubugl-math": "^1.1.6"
   },
   "devDependencies": {
     "minimist": "^1.2.0",
