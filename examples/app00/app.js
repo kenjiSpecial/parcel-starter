@@ -38,6 +38,9 @@ export default class App {
 			this.stats = new Stats();
 			document.body.appendChild(this.stats.dom);
 			this._addGui();
+		} else {
+			let descId = document.getElementById('tubugl-desc');
+			descId.style.display = 'none';
 		}
 
 		this._createProgram();
