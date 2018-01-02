@@ -1,3 +1,13 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
 # gitignore
 
 node_modules
@@ -7,9 +17,14 @@ yarn.lock
 package-lock.json
 
 dist
+!docs/*/dist
 
-.idea/*
+.idea
 
-.cache/*
+.cache
 
-.vscode/*
+.vscode
+
+build
+
+doc
