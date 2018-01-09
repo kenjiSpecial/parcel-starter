@@ -3,69 +3,10 @@ const TweenMax = require('gsap');
 const Stats = require('stats.js');
 import imageURL from '../assets/image.jpg';
 import uvImageURL from '../assets/uv_img.jpg';
+import vertexShader from './shaders/shader.vert';
+import fragmentShader from './shaders/shader.frag';
 
-import { Program, ArrayBuffer, IndexArrayBuffer, Texture } from 'tubugl-core';
-
-const vertexShader = `// an attribute will receive data from a buffer
-  precision mediump float;
-  
-  attribute vec4 position;
-  uniform float uTheta;
-  uniform float uWindowRate;
-  
-  varying vec2 vUv;
-
-  void main() {
-    float x = mix(-1., 1.0 + uWindowRate * 2.0, position.x);
-    float y = mix(-1., 1.0 + 1.0/uWindowRate * 2.0, position.y);
-    float uvX = mix(0., 1.0 + uWindowRate, position.x);
-    float uvY = 1.0 - mix(0., 1.0 + 1.0/uWindowRate, position.y);
-    
-    gl_Position = vec4(x, y, position.z, 1.0);
-    
-    vUv = vec2(uvX, uvY);
-  }`;
-
-const fragmentShader = `
-  precision mediump float;
-  
-  varying vec2 vUv;
-  
-  uniform sampler2D uTexture;
-  uniform float uWindowRate;
-  uniform float uImageRate;
-  uniform bool uIsGrey;
-  uniform bool uIsFit;
-  
-
-  void main() {
-    vec2 customUv;
-    
-    if(uIsFit){
-        customUv = vUv;   
-    }else{
-        if(uImageRate < uWindowRate){
-            float winWSize = 1.0/uWindowRate; float imgWSize = 1.0/uImageRate; 
-            customUv.x = (imgWSize-winWSize)/imgWSize/2.0 + mix( 0.0, winWSize/imgWSize, vUv.x);
-            customUv.y = vUv.y;
-        }else{
-            customUv.x = vUv.x;
-            customUv.y = (uImageRate-uWindowRate)/uImageRate/2.0 + mix( 0.0, uWindowRate/uImageRate, vUv.y);
-        }
-    }
-    
-    vec4 color;
-    if(uIsGrey){
-        vec4 outputColor =texture2D( uTexture, customUv);
-        color = vec4( (outputColor.r + outputColor.g + outputColor.b)/3. );
-        color.a = 1.0;  
-    }else{
-        color = texture2D( uTexture, customUv);
-    }
-    
-    gl_FragColor = color;
-  }
-`;
+import { Program, ArrayBuffer, Texture } from 'tubugl-core';
 
 export default class App {
 	constructor(params = {}) {
