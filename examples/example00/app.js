@@ -3,27 +3,9 @@ const TweenMax = require('gsap');
 const Stats = require('stats.js');
 
 import { Program, ArrayBuffer, IndexArrayBuffer } from 'tubugl-core';
+import vertexShader from './components/shaders/shader.vert';
+import fragmentShader from './components/shaders/shader.frag';
 import { appCall } from '../../index';
-
-const vertexShader = `// an attribute will receive data from a buffer
-  attribute vec4 a_position;
-  uniform float uTheta;
-
-  void main() {
-    gl_Position = a_position + vec4(0.0 * cos(uTheta), 0.0 * sin(uTheta), 0.0, 0.0);
-  }`;
-
-const fragmentShader = `
-  precision mediump float;
-
-  void main() {
-    float colorR = gl_FrontFacing ? 1.0 : 0.0;
-    float colorG = gl_FrontFacing ? 0.0 : 1.0;
-    
-    gl_FragColor = vec4(colorR, colorG, 0.0, 1.0);
-    
-  }
-`;
 
 export default class App {
 	constructor(params = {}) {
