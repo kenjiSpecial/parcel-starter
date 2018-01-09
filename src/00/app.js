@@ -97,8 +97,6 @@ export default class App {
 		TweenMax.ticker.removeEventListener('tick', this.loop, this);
 	}
 
-	onMouseMove(mouse) {}
-
 	onKeyDown(ev) {
 		switch (ev.which) {
 			case 27:
