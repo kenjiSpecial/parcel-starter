@@ -21,6 +21,7 @@
     "tubugl-math": "^1.1.6"
   },
   "devDependencies": {
+    "babel-preset-env": "^1.6.1",
     "minimist": "^1.2.0",
     "puppeteer": "^0.13.0"
   }
