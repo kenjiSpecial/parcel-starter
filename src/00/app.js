@@ -1,10 +1,11 @@
-const dat = require('dat.gui/build/dat.gui');
+const dat = require('../vendor/dat.gui.min');
 const TweenMax = require('gsap');
 const Stats = require('stats.js');
+const vertexShader = require('./shaders/shader.vert');
+const fragmentShader = require('./shaders/shader.frag');
+
 import imageURL from '../assets/image.jpg';
 import uvImageURL from '../assets/uv_img.jpg';
-import vertexShader from './shaders/shader.vert';
-import fragmentShader from './shaders/shader.frag';
 
 import { Program, ArrayBuffer, Texture } from 'tubugl-core';
 
