@@ -11,17 +11,19 @@
     "docs": "python -m SimpleHTTPServer 8200"
   },
   "dependencies": {
-    "gsap": "^1.20.3",
-    "stats.js": "https://github.com/mrdoob/stats.js.git",
-    "tubugl-3d-shape": "^1.3.0",
+    "tubugl-3d-shape": "^1.3.2",
+    "tubugl-camera": "^1.3.2",
     "tubugl-constants": "^1.0.3",
-    "tubugl-core": "^1.1.5",
-    "tubugl-math": "^1.1.7"
+    "tubugl-core": "^1.1.6",
+    "tubugl-math": "^1.1.8"
   },
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "gsap": "^1.20.3",
     "minimist": "^1.2.0",
     "parcel-plugin-glsl": "kenjiSpecial/parcel-plugin-glsl",
-    "puppeteer": "^0.13.0"
+    "puppeteer": "^0.13.0",
+    "stats.js": "mrdoob/stats.js"
   }
 }

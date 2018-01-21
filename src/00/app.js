@@ -1,13 +1,20 @@
 const dat = require('../vendor/dat.gui.min');
-const TweenMax = require('gsap');
+// const TweenMax = require('gsap/src/TweenMax');
+require('gsap');
 const Stats = require('stats.js');
 const vertexShader = require('./shaders/shader.vert');
 const fragmentShader = require('./shaders/shader.frag');
 
-import imageURL from '../assets/image.jpg';
-import uvImageURL from '../assets/uv_img.jpg';
+// import furImageURL from '../assets/earth.jpg';
+import furImageURL from '../assets/fur.jpg';
+import unevenAlphaImageURL from '../assets/noise.jpg';
 
 import { Program, ArrayBuffer, Texture } from 'tubugl-core';
+import { PerspectiveCamera, CameraController } from 'tubugl-camera';
+import { COLOR_BUFER_BIT, DEPTH_BUFFER_BIT } from 'tubugl-constants';
+import { Fur } from './fur';
+import { FurSphere } from './furSphere';
+// import { Cube } from 'tubugl-3d-shape';
 
 export default class App {
 	constructor(params = {}) {
@@ -15,11 +22,8 @@ export default class App {
 		this._height = params.height ? params.height : window.innerHeight;
 
 		this.canvas = document.createElement('canvas');
-		this.gl = this.canvas.getContext('webgl');
-
-		this._isGrey = false;
-		this._isFit = false;
-		this._isUVImage = false;
+		this.gl = this.canvas.getContext('webgl2', { transparent: false });
+		if (this.gl) this.isWebgl2 = true;
 
 		if (params.isDebug) {
 			this.stats = new Stats();
@@ -30,53 +34,32 @@ export default class App {
 			descId.style.display = 'none';
 		}
 
-		this._createProgram();
+		this._makeCamera();
+		this._makeCameraController();
+		this._makeShape();
+
 		this.resize(this._width, this._height);
 	}
 
 	_addGui() {
 		this.gui = new dat.GUI();
 		this.playAndStopGui = this.gui.add(this, '_playAndStop').name('pause');
-		this.gui
-			.add(this, '_isGrey')
-			.name('isGrey')
-			.onChange(() => {
-				this._obj.program.bind();
-				this.gl.uniform1f(this._program.getUniforms('uIsGrey').location, this._isGrey);
-			});
-		this.gui
-			.add(this, '_isFit')
-			.name('isFitScreen')
-			.onChange(() => {
-				this._obj.program.bind();
-				this.gl.uniform1f(this._program.getUniforms('uIsFit').location, this._isFit);
-			});
-		this.gui
-			.add(this, '_isUVImage')
-			.name('isUVImage')
-			.onChange(() => {
-				let image = this._isUVImage ? this._uvimage : this._image;
-				this._texture
-					.bind()
-					.setFilter()
-					.wrap()
-					.fromImage(image, image.width, image.height);
-			});
 	}
 
-	_createProgram() {
-		this._program = new Program(this.gl, vertexShader, fragmentShader);
+	_makeShape() {
+		this._cube = new FurSphere(this.gl, { isGl2: this.isWebgl2 }, 200, 32, 32);
+	}
 
-		let vertices = new Float32Array([0, 0, 1, 0, 0, 1]);
+	_makeCamera() {
+		this._camera = new PerspectiveCamera(window.innerWidth, window.innerHeight, 60, 1, 2000);
+		this._camera.position.z = 800;
+		this._camera.lookAt([0, 0, 0]);
+	}
 
-		this._arrayBuffer = new ArrayBuffer(this.gl, vertices);
-		this._arrayBuffer.setAttribs('position', 2, this.gl.FLOAT, false, 0, 0);
-
-		this._obj = {
-			program: this._program,
-			positionBuffer: this._arrayBuffer,
-			count: 3
-		};
+	_makeCameraController() {
+		this._cameraController = new CameraController(this._camera, this.canvas);
+		this._cameraController.minDistance = 400;
+		this._cameraController.maxDistance = 1200;
 	}
 
 	animateIn() {
@@ -85,13 +68,14 @@ export default class App {
 
 	loop() {
 		if (this.stats) this.stats.update();
+		let gl = this.gl;
 
-		this._obj.program.bind();
-		this._obj.program.setUniformTexture(this._texture, 'uTexture');
-		this._texture.activeTexture().bind();
-		this._obj.positionBuffer.bind().attribPointer(this._obj.program);
+		gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		this.gl.drawArrays(this.gl.TRIANGLES, 0, this._obj.count);
+		this._camera.update();
+		this._cube.render(this._camera, this._furTexture, this._alphaTexture);
 	}
 
 	animateOut() {
@@ -107,35 +91,48 @@ export default class App {
 	}
 
 	_onload() {
-		this._texture = new Texture(this.gl);
-		this._texture
+		this._imgCnt++;
+		if (this._imgCnt < 2) return;
+
+		console.log('onload');
+		this._furTexture = new Texture(this.gl);
+		this._furTexture.name = 'diffuseMap';
+		this._furTexture
 			.bind()
 			.setFilter()
 			.wrap()
-			.fromImage(this._image, this._image.width, this._image.height);
+			.fromImage(this._furImage, this._furImage.width, this._furImage.height);
 
-		this._obj.program.bind();
-		this.gl.uniform1f(
-			this._program.getUniforms('uImageRate').location,
-			this._image.height / this._image.width
-		);
+		console.log(this._alphaImage, this._alphaImage.width, this._alphaImage.height);
+		this._alphaTexture = new Texture(this.gl);
+		this._alphaTexture.name = 'alphaMap';
+		this._alphaTexture
+			.bind()
+			.setFilter()
+			.wrap()
+			.fromImage(this._alphaImage, this._alphaImage.width, this._alphaImage.height);
+
+		// // -- // --- // --- // --|- _ -|-- \\ --- \\ --- \\ -- \\ \\
 
 		this._playAndStop();
 	}
 
 	_startLoad() {
-		this._image = new Image();
-		this._image.onload = this._onload.bind(this);
-		this._image.onerror = function() {
-			console.error('image load error');
-		};
-		this._image.src = imageURL;
+		this._imgCnt = 0;
 
-		this._uvimage = new Image();
-		this._uvimage.onerror = function() {
+		this._furImage = new Image();
+		this._furImage.onload = this._onload.bind(this);
+		this._furImage.onerror = function() {
 			console.error('image load error');
 		};
-		this._uvimage.src = uvImageURL;
+		this._furImage.src = furImageURL;
+
+		this._alphaImage = new Image();
+		this._alphaImage.onload = this._onload.bind(this);
+		this._alphaImage.onerror = function() {
+			console.error('image load error');
+		};
+		this._alphaImage.src = unevenAlphaImageURL;
 	}
 
 	_playAndStop() {
@@ -157,11 +154,11 @@ export default class App {
 		this.canvas.height = this._height;
 		this.gl.viewport(0, 0, this._width, this._height);
 
-		this._obj.program.bind();
-		this.gl.uniform1f(
-			this._program.getUniforms('uWindowRate').location,
-			this._height / this._width
-		);
+		// this._obj.program.bind();
+		// this.gl.uniform1f(
+		// 	this._program.getUniforms('uWindowRate').location,
+		// 	this._height / this._width
+		// );
 	}
 
 	destroy() {}

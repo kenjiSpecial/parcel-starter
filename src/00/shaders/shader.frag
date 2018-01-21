@@ -1,38 +1,37 @@
-precision mediump float;
+#version 300 es
 
-varying vec2 vUv;
+precision highp float;
+uniform sampler2D diffuseMap;
+uniform sampler2D alphaMap;
+uniform vec4 colorStart;
+uniform vec4 colorEnd;
+uniform float uTime;
 
-uniform sampler2D uTexture;
-uniform float uWindowRate;
-uniform float uImageRate;
-uniform bool uIsGrey;
-uniform bool uIsFit;
+in vec2 vUv;
+in vec4 vAO;
+in float vLayerCoeff;
+out vec4 fragColor;
+
+float rand(vec2 n) { 
+	return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+}
+
+float noise(vec2 p){
+	vec2 ip = floor(p);
+	vec2 u = fract(p);
+	u = u*u*(3.0-2.0*u);
+	
+	float res = mix(
+		mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),
+		mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);
+	return res*res;
+}
 
 
-void main() {
-vec2 customUv;
-
-    if(uIsFit){
-        customUv = vUv;   
-    }else{
-        if(uImageRate < uWindowRate){
-            float winWSize = 1.0/uWindowRate; float imgWSize = 1.0/uImageRate; 
-            customUv.x = (imgWSize-winWSize)/imgWSize/2.0 + mix( 0.0, winWSize/imgWSize, vUv.x);
-            customUv.y = vUv.y;
-        }else{
-            customUv.x = vUv.x;
-            customUv.y = (uImageRate-uWindowRate)/uImageRate/2.0 + mix( 0.0, uWindowRate/uImageRate, vUv.y);
-        }
-    }
-
-    vec4 color;
-    if(uIsGrey){
-        vec4 outputColor =texture2D( uTexture, customUv);
-        color = vec4( (outputColor.r + outputColor.g + outputColor.b)/3. );
-        color.a = 1.0;  
-    }else{
-        color = texture2D( uTexture, customUv);
-    }
-
-    gl_FragColor = color;
+void main(){
+    vec4 diffuseColor = texture(diffuseMap, vUv);
+    // float alphaColor = texture(alphaMap, vUv).r ;
+    float alphaColor = clamp((noise(vUv * 1024. + vec2(uTime * 3.)) ) , 0.0, 1.0);
+    fragColor = diffuseColor * vec4( vAO.rgba );
+    fragColor.a *= alphaColor;
 }
