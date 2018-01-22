@@ -5,8 +5,8 @@ const Stats = require('stats.js');
 const vertexShader = require('./shaders/shader.vert');
 const fragmentShader = require('./shaders/shader.frag');
 
-// import furImageURL from '../assets/earth.jpg';
-import furImageURL from '../assets/fur.jpg';
+import furImageURL from '../assets/earth.jpg';
+// import furImageURL from '../assets/fur.jpg';
 import unevenAlphaImageURL from '../assets/noise.jpg';
 
 import { Program, ArrayBuffer, Texture } from 'tubugl-core';
@@ -103,7 +103,6 @@ export default class App {
 			.wrap()
 			.fromImage(this._furImage, this._furImage.width, this._furImage.height);
 
-		console.log(this._alphaImage, this._alphaImage.width, this._alphaImage.height);
 		this._alphaTexture = new Texture(this.gl);
 		this._alphaTexture.name = 'alphaMap';
 		this._alphaTexture

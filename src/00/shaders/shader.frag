@@ -27,11 +27,17 @@ float noise(vec2 p){
 	return res*res;
 }
 
+float random (vec2 st) {
+    return fract(sin(dot(st.xy,
+                         vec2(12.9898,78.233)))*
+        43758.5453123);
+}
+
 
 void main(){
     vec4 diffuseColor = texture(diffuseMap, vUv);
-    // float alphaColor = texture(alphaMap, vUv).r ;
-    float alphaColor = clamp((noise(vUv * 1024. + vec2(uTime * 3.)) ) , 0.0, 1.0);
+    // float alphaColor = texture(alphaMap, vUv * 100. ).r ;
+    float alphaColor = clamp((noise(vUv * 1024.) ) , 0.0, 1.0);
     fragColor = diffuseColor * vec4( vAO.rgba );
     fragColor.a *= alphaColor;
 }
