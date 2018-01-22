@@ -1,5 +1,5 @@
-const dat = require('dat.gui/build/dat.gui.min');
-const TweenMax = require('gsap');
+const dat = require('../vendors/dat.gui.min');
+const TweenLite = require('gsap/src/uncompressed/TweenLite');
 const Stats = require('stats.js');
 
 import { Program, ArrayBuffer, IndexArrayBuffer } from 'tubugl-core';
@@ -66,7 +66,7 @@ export default class App {
 
 	animateIn() {
 		this.isLoop = true;
-		TweenMax.ticker.addEventListener('tick', this.loop, this);
+		TweenLite.ticker.addEventListener('tick', this.loop, this);
 	}
 
 	loop() {
@@ -83,7 +83,7 @@ export default class App {
 	}
 
 	animateOut() {
-		TweenMax.ticker.removeEventListener('tick', this.loop, this);
+		TweenLite.ticker.removeEventListener('tick', this.loop, this);
 	}
 
 	mouseMoveHandler(mouse) {
@@ -112,10 +112,10 @@ export default class App {
 	_playAndStop() {
 		this.isLoop = !this.isLoop;
 		if (this.isLoop) {
-			TweenMax.ticker.addEventListener('tick', this.loop, this);
+			TweenLite.ticker.addEventListener('tick', this.loop, this);
 			this.playAndStopGui.name('pause');
 		} else {
-			TweenMax.ticker.removeEventListener('tick', this.loop, this);
+			TweenLite.ticker.removeEventListener('tick', this.loop, this);
 			this.playAndStopGui.name('play');
 		}
 	}
