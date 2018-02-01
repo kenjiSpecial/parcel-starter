@@ -51,6 +51,7 @@ export default class App {
 	_setupDebug() {
 		this._makeStats();
 		this._makeGui();
+		this._makeGrid();
 	}
 
 	_makeStats() {
@@ -68,7 +69,7 @@ export default class App {
 		var divisions = 20;
 
 		var gridHelper = new THREE.GridHelper(size, divisions);
-		this.scene.add(gridHelper);
+		this._scene.add(gridHelper);
 	}
 
 	_makeMesh() {
