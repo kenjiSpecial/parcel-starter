@@ -10,50 +10,76 @@ import { fragmentShader, vertexShader } from './components/shaders/shader';
 export default class App {
 	constructor(params) {
 		this.params = params || {};
-		this.camera = new THREE.PerspectiveCamera(
+
+		this._makeRenderer();
+		this._makeScene();
+		this._makeCamera();
+		this._makeMesh();
+
+		if (this.params.isDebug) this._setupDebug();
+
+		this._makeUtils();
+		this.resize();
+	}
+
+	_makeRenderer() {
+		this._renderer = new THREE.WebGLRenderer({
+			antialias: true
+		});
+		this.dom = this._renderer.domElement;
+	}
+
+	_makeScene() {
+		this._scene = new THREE.Scene();
+	}
+
+	_makeCamera() {
+		this._camera = new THREE.PerspectiveCamera(
 			60,
 			window.innerWidth / window.innerHeight,
 			1,
 			10000
 		);
-		this.camera.position.z = 1000;
-
-		this.scene = new THREE.Scene();
-
-		this.mesh = this.createMesh();
-		this.scene.add(this.mesh);
-
-		this.renderer = new THREE.WebGLRenderer({
-			antialias: true
-		});
-		this.dom = this.renderer.domElement;
-
-		if (this.params.isDebug) {
-			this.stats = new Stats();
-			document.body.appendChild(this.stats.dom);
-			this._addGui();
-		}
-
-		this.clock = new THREE.Clock();
-		this.control = new OrbitControls(this.camera);
-
-		this.resize();
+		this._camera.position.z = 1000;
 	}
 
-	_addGui() {
-		this.gui = new dat.GUI();
-		this.playAndStopGui = this.gui.add(this, '_playAndStop').name('pause');
+	_makeUtils() {
+		this._clock = new THREE.Clock();
+		this._control = new OrbitControls(this._camera);
 	}
 
-	createMesh() {
+	_setupDebug() {
+		this._makeStats();
+		this._makeGui();
+	}
+
+	_makeStats() {
+		this._stats = new Stats();
+		document.body.appendChild(this._stats.dom);
+	}
+
+	_makeGui() {
+		this._gui = new dat.GUI();
+		this.playAndStopGui = this._gui.add(this, '_playAndStop').name('pause');
+	}
+
+	_makeGrid() {
+		var size = 1000;
+		var divisions = 20;
+
+		var gridHelper = new THREE.GridHelper(size, divisions);
+		this.scene.add(gridHelper);
+	}
+
+	_makeMesh() {
 		let geometry = new THREE.BoxGeometry(200, 200, 200);
 		let mat = new THREE.RawShaderMaterial({
 			vertexShader: vertexShader,
 			fragmentShader: fragmentShader
 		});
 
-		let mesh = new THREE.Mesh(geometry, mat);
-		return mesh;
+		this._mesh = new THREE.Mesh(geometry, mat);
+		this._scene.add(this._mesh);
 	}
 
 	animateIn() {
@@ -64,11 +90,11 @@ export default class App {
 	loop() {
 		// let delta = this.clock.getDelta();
 
-		this.mesh.rotation.x += 0.01;
-		this.mesh.rotation.y += 0.02;
+		this._mesh.rotation.x += 0.01;
+		this._mesh.rotation.y += 0.02;
 
-		this.renderer.render(this.scene, this.camera);
-		if (this.stats) this.stats.update();
+		this._renderer.render(this._scene, this._camera);
+		if (this._stats) this._stats.update();
 	}
 
 	animateOut() {
@@ -97,10 +123,10 @@ export default class App {
 	}
 
 	resize() {
-		this.camera.aspect = window.innerWidth / window.innerHeight;
-		this.camera.updateProjectionMatrix();
+		this._camera.aspect = window.innerWidth / window.innerHeight;
+		this._camera.updateProjectionMatrix();
 
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
+		this._renderer.setSize(window.innerWidth, window.innerHeight);
 	}
 
 	destroy() {}
