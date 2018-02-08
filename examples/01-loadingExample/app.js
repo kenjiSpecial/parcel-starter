@@ -6,6 +6,10 @@ const EventEmitter = require('wolfy87-eventemitter');
 import { GridHelper } from 'tubugl-helper';
 import { PerspectiveCamera, CameraController } from 'tubugl-camera';
 import { ModelObject } from './components/object';
+import { CustomSphere, CustomCube } from './components/customShape';
+
+const baseVertexShaderSrc = require('./components/shaders/shader-vert.glsl');
+const baseFragmentShaderSrc = require('./components/shaders/shader-frag.glsl');
 
 export default class App extends EventEmitter {
 	constructor(params = {}) {
@@ -62,6 +66,48 @@ export default class App extends EventEmitter {
 
 	_makeObject() {
 		this._materialBallObject = new ModelObject(this.gl, {}, this._materaialBallData);
+		this._shapes.push(this._materialBallObject);
+	}
+
+	_makeSphere() {
+		let side = 100;
+		this._sphere = new CustomSphere(
+			this.gl,
+			{
+				vertexShaderSrc: baseVertexShaderSrc,
+				fragmentShaderSrc: baseFragmentShaderSrc
+			},
+			side,
+			15,
+			15
+		);
+		this._sphere.position.y = side;
+		this._sphere.position.x = side + side * 2;
+
+		this._shapes.push(this._sphere);
+	}
+
+	_makeBox() {
+		let side = 200;
+
+		this._box = new CustomCube(
+			this.gl,
+			{
+				vertexShaderSrc: baseVertexShaderSrc,
+				fragmentShaderSrc: baseFragmentShaderSrc
+			},
+			side,
+			side,
+			side,
+			4,
+			4,
+			4
+		);
+
+		this._box.position.y = side / 2;
+		this._box.position.x = -side / 2 - side;
+
+		this._shapes.push(this._box);
 	}
 
 	_onLoadAssetsDone() {
@@ -70,7 +116,12 @@ export default class App extends EventEmitter {
 	}
 
 	_initializeObjects() {
+		this._shapes = [];
+
 		this._makeObject();
+		this._makeBox();
+		this._makeSphere();
+
 		this._initializeObjectDone();
 	}
 
@@ -97,7 +148,10 @@ export default class App extends EventEmitter {
 
 		this._camera.update();
 
-		this._materialBallObject.render(this._camera);
+		// this._materialBallObject.render(this._camera);
+		this._shapes.forEach(shape => {
+			shape.render(this._camera);
+		});
 		this._helpers.forEach(helper => {
 			helper.render(this._camera);
 		});
@@ -150,6 +204,8 @@ export default class App extends EventEmitter {
 		this.canvas.width = this._width;
 		this.canvas.height = this._height;
 		this.gl.viewport(0, 0, this._width, this._height);
+
+		this._camera.updateSize(this._width, this._height);
 	}
 
 	destroy() {}

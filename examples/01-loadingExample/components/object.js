@@ -16,7 +16,7 @@ export class ModelObject {
 	constructor(gl, params = {}, data) {
 		this._gl = gl;
 		this.modelMatrix = mat4.create();
-		mat4.scale(this.modelMatrix, this.modelMatrix, [30, 30, 30]);
+		mat4.scale(this.modelMatrix, this.modelMatrix, [20, 20, 20]);
 		mat4.translate(this.modelMatrix, this.modelMatrix, [0, 7.75, 0]);
 
 		this.normalMatrix = mat4.create();
