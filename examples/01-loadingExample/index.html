@@ -1,0 +1,61 @@
+<html>
+   <meta charset="UTF-8">
+   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+   <style>
+       *{
+           margin: 0;
+       }
+       html, body{
+        font-family: 'Roboto', sans-serif;
+           width: 100%;
+           height: 100%;
+           overflow: hidden;
+           background: #000000;
+       }
+       canvas{
+           display: block;
+       }
+       #tubugl-desc{
+           position: absolute;
+           bottom: 20px;
+           left: 20px;
+           color: #aaaaaa;
+           font-size: 12px;
+           line-height: 1.5em;
+       }
+       
+       #tubugl-loading{
+           font-size: 14px;
+           color: #ffffff;
+           position: absolute;
+           top:20px;
+           left: 20px;
+       }
+       
+       #tubugl-loading-initializing{
+           display: none;
+       }
+       
+       a{
+            color: white;
+       }
+       a:hover{
+           text-decoration: none;
+       }
+   </style>
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+<body>
+    <div id="tubugl-loading">
+        <span id="tubugl-loading-text">Loading</span>
+        <span id="tubugl-loading-result"></span>
+        <span id="tubugl-loading-initializing">Initializing</span>
+    </div>
+    
+    <div id="tubugl-desc">
+        
+        <p class="tubugl-p">Developed with <a href="https://github.com/kenjiSpecial/tubugl">tubugl</a></p>
+        <p class="tubugl-p">See <a href="https://kenjispecial.github.io/###">other examples</a></p>
+    </div>
+    <script src="./demo.js"></script>
+</body>
+</html>

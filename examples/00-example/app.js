@@ -3,8 +3,8 @@ const TweenLite = require('gsap/src/uncompressed/TweenLite');
 const Stats = require('stats.js');
 
 import { Program, ArrayBuffer, IndexArrayBuffer } from 'tubugl-core';
-import vertexShader from './components/shaders/shader.vert';
-import fragmentShader from './components/shaders/shader.frag';
+import vertexShader from './components/shaders/shader-vert.glsl';
+import fragmentShader from './components/shaders/shader-frag.glsl';
 import { appCall } from '../../index';
 
 export default class App {
