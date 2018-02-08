@@ -13,14 +13,14 @@
   "dependencies": {
     "parcel-plugin-glsl": "kenjiSpecial/parcel-plugin-glsl",
     "tubugl-constants": "^1.0.3",
-    "tubugl-core": "^1.1.6",
-    "tubugl-math": "^1.1.8"
+    "tubugl-core": "^1.1.9",
+    "tubugl-math": "^1.1.10"
   },
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
     "gsap": "^1.20.3",
     "minimist": "^1.2.0",
-    "puppeteer": "^0.13.0",
+    "puppeteer": "^1.0.0",
     "stats.js": "mrdoob/stats.js"
   }
 }
