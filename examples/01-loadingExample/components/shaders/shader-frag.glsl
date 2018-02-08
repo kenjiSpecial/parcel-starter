@@ -1,8 +1,8 @@
 precision mediump float;
 
-void main() {
-    float colorR = gl_FrontFacing ? 1.0 : 0.0;
-    float colorG = gl_FrontFacing ? 0.0 : 1.0;
+varying vec3 vNormal;
 
-    gl_FragColor = vec4(colorR, colorG, 0.0, 1.0);
-}  
+void main(){
+    vec3 normal = normalize(vNormal);
+    gl_FragColor = vec4(normal/2. + vec3(0.5), 1.0);
+}

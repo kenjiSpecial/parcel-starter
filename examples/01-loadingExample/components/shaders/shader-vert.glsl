@@ -1,6 +1,15 @@
-attribute vec4 a_position;
-uniform float uTheta;
+attribute vec4 position;
+attribute vec3 normal;
 
-void main() {
-    gl_Position = a_position + vec4(0.0 * cos(uTheta), 0.0 * sin(uTheta), 0.0, 0.0);
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 modelMatrix;
+// = inverse transpose of modelViewMatrix
+uniform mat4 normalMatrix;
+
+varying vec3 vNormal;
+
+void main(){
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * position;
+    vNormal =  mat3(normalMatrix) * normal;
 }

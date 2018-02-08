@@ -3,12 +3,9 @@ const TweenLite = require('gsap/src/uncompressed/TweenLite');
 const Stats = require('stats.js');
 const EventEmitter = require('wolfy87-eventemitter');
 
-import { Program, ArrayBuffer, IndexArrayBuffer } from 'tubugl-core';
-import vertexShader from './components/shaders/shader-vert.glsl';
-import fragmentShader from './components/shaders/shader-frag.glsl';
-import { appCall } from '../../index';
-
-import jsonFile from '../../';
+import { GridHelper } from 'tubugl-helper';
+import { PerspectiveCamera, CameraController } from 'tubugl-camera';
+import { ModelObject } from './components/object';
 
 export default class App extends EventEmitter {
 	constructor(params = {}) {
@@ -21,7 +18,10 @@ export default class App extends EventEmitter {
 		this.canvas = document.createElement('canvas');
 		this.gl = this.canvas.getContext('webgl');
 
-		this._createProgram();
+		this._makeCamera();
+		this._makeCameraController();
+		this._makeHelper();
+
 		this.resize(this._width, this._height);
 	}
 
@@ -41,39 +41,27 @@ export default class App extends EventEmitter {
 		this.playAndStopGui = this.gui.add(this, '_playAndStop').name('pause');
 	}
 
-	_createProgram() {
-		this._program = new Program(this.gl, vertexShader, fragmentShader);
-
-		let side = 1.0;
-		let vertices = new Float32Array([
-			-side / 2,
-			-side / 2,
-			side / 2,
-			-side / 2,
-			side / 2,
-			side / 2,
-			-side / 2,
-			side / 2
-		]);
-
-		let indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
-
-		this._arrayBuffer = new ArrayBuffer(this.gl, vertices);
-		this._arrayBuffer.setAttribs('a_position', 2, this.gl.FLOAT, false, 0, 0);
-
-		this._indexBuffer = new IndexArrayBuffer(this.gl, indices);
-
-		this._obj = {
-			program: this._program,
-			positionBuffer: this._arrayBuffer,
-			indexBuffer: this._indexBuffer,
-			count: 6
-		};
+	_makeCamera() {
+		this._camera = new PerspectiveCamera(window.innerWidth, window.innerHeight, 60, 1, 2000);
+		this._camera.position.z = 800;
+		this._camera.position.x = -800;
+		this._camera.position.y = 400;
+		this._camera.lookAt([0, 0, 0]);
 	}
 
-	startLoading() {
-		this._roboOrbJson = require('../assets/robo-orb.json');
-		this._onLoadAssetsDone();
+	_makeCameraController() {
+		this._cameraController = new CameraController(this._camera, this.canvas);
+		this._cameraController.minDistance = 500;
+		this._cameraController.maxDistance = 1500;
+	}
+
+	_makeHelper() {
+		let gridHelper = new GridHelper(this.gl, {}, 1000, 1000, 20, 20);
+		this._helpers = [gridHelper];
+	}
+
+	_makeObject() {
+		this._materialBallObject = new ModelObject(this.gl, {}, this._materaialBallData);
 	}
 
 	_onLoadAssetsDone() {
@@ -82,12 +70,18 @@ export default class App extends EventEmitter {
 	}
 
 	_initializeObjects() {
+		this._makeObject();
 		this._initializeObjectDone();
 	}
 
 	_initializeObjectDone() {
 		this.trigger('initializeObjectDone');
 		this._setDebug();
+	}
+
+	startLoading() {
+		this._materaialBallData = require('../assets/material-ball.json');
+		this._onLoadAssetsDone();
 	}
 
 	animateIn() {
@@ -101,11 +95,14 @@ export default class App extends EventEmitter {
 		this.gl.clearColor(0, 0, 0, 1);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
-		this._obj.program.bind();
-		this._obj.indexBuffer.bind();
-		this._obj.positionBuffer.bind().attribPointer(this._obj.program);
+		this._camera.update();
 
-		this.gl.drawElements(this.gl.TRIANGLES, this._obj.count, this.gl.UNSIGNED_SHORT, 0);
+		this._materialBallObject.render(this._camera);
+		this._helpers.forEach(helper => {
+			helper.render(this._camera);
+		});
+
+		// this.gl.drawElements(this.gl.TRIANGLES, this._obj.count, this.gl.UNSIGNED_SHORT, 0);
 	}
 
 	animateOut() {
@@ -156,18 +153,4 @@ export default class App extends EventEmitter {
 	}
 
 	destroy() {}
-}
-
-// TODO
-function loadJSON(fileDir, callback) {
-	var xobj = new XMLHttpRequest();
-	xobj.overrideMimeType('application/json');
-	xobj.open('GET', fileDir, true); // Replace 'my_data' with the path to your file
-	xobj.onreadystatechange = function() {
-		if (xobj.readyState == 4 && xobj.status == '200') {
-			// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-			callback(xobj.responseText);
-		}
-	};
-	xobj.send(null);
 }
