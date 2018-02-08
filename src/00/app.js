@@ -2,8 +2,6 @@ const dat = require('../vendor/dat.gui.min');
 // const TweenMax = require('gsap/src/TweenMax');
 require('gsap');
 const Stats = require('stats.js');
-const vertexShader = require('./shaders/shader.vert');
-const fragmentShader = require('./shaders/shader.frag');
 
 import furImageURL from '../assets/earth.jpg';
 // import furImageURL from '../assets/fur.jpg';
@@ -14,7 +12,6 @@ import { PerspectiveCamera, CameraController } from 'tubugl-camera';
 import { COLOR_BUFER_BIT, DEPTH_BUFFER_BIT } from 'tubugl-constants';
 import { Fur } from './fur';
 import { FurSphere } from './furSphere';
-// import { Cube } from 'tubugl-3d-shape';
 
 export default class App {
 	constructor(params = {}) {

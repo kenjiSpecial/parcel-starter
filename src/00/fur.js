@@ -1,10 +1,10 @@
-import { Cube } from 'tubugl-3d-shape';
+import { Cube } from 'tubugl-3d-shape/src/cube';
 
 import { TRIANGLES, UNSIGNED_SHORT, CULL_FACE, DEPTH_TEST } from 'tubugl-constants';
 import { Program, ArrayBuffer, IndexArrayBuffer, VAO } from 'tubugl-core';
 
-const fragmentSrc = require('./shaders/shader.frag');
-const vertexSrc = require('./shaders/shader.vert');
+const fragmentSrc = require('./shaders/shader-frag.glsl');
+const vertexSrc = require('./shaders/shader-vert.glsl');
 
 export class Fur extends Cube {
 	constructor(

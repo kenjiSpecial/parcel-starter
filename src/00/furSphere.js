@@ -1,25 +1,13 @@
-import { Sphere } from 'tubugl-3d-shape';
-import {
-	TRIANGLES,
-	UNSIGNED_SHORT,
-	CULL_FACE,
-	BACK,
-	FRONT,
-	DEPTH_TEST,
-	SRC_ALPHA,
-	ONE_MINUS_SRC_ALPHA,
-	BLEND,
-	ONE,
-	ZERO,
-	UNSIGNED_BYTE
-} from 'tubugl-constants';
-import { Program, ArrayBuffer, IndexArrayBuffer, VAO } from 'tubugl-core';
+import { Sphere } from 'tubugl-3d-shape/src/sphere';
 
-const fragmentSrc = require('./shaders/shader.frag');
-const vertexSrc = require('./shaders/shader.vert');
+import { TRIANGLES, UNSIGNED_SHORT, CULL_FACE, DEPTH_TEST } from 'tubugl-constants';
+import { Program, VAO } from 'tubugl-core';
 
-const baseFragmentSrc = require('./shaders/base-shader.frag');
-const baseVertSrc = require('./shaders/base-shader.vert');
+const fragmentSrc = require('./shaders/shader-frag.glsl');
+const vertexSrc = require('./shaders/shader-vert.glsl');
+
+const baseFragmentSrc = require('./shaders/base-shader-frag.glsl');
+const baseVertSrc = require('./shaders/base-shader-vert.glsl');
 
 export class FurSphere extends Sphere {
 	constructor(
@@ -53,7 +41,7 @@ export class FurSphere extends Sphere {
 		console.log(this._indexBuffer);
 	}
 
-	_makeProgram(params) {
+	_makeProgram() {
 		this._baseProgram = new Program(this._gl, baseVertSrc, baseFragmentSrc);
 		this._program = new Program(this._gl, vertexSrc, fragmentSrc);
 	}
@@ -109,7 +97,7 @@ export class FurSphere extends Sphere {
 		gl.drawElements(TRIANGLES, this._cnt, UNSIGNED_SHORT, 0);
 	}
 
-	update(camera, furTexture, alphaTexture) {
+	update(camera, furTexture) {
 		this._time += 1 / 60;
 
 		this._program.bind();
