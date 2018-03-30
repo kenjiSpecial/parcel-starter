@@ -1,6 +1,5 @@
-const dat = require('../vendors/dat.gui.min');
 const TweenLite = require('gsap/src/uncompressed/TweenLite');
-const Stats = require('stats.js');
+const UIL = require('uil');
 
 import { Program, ArrayBuffer, IndexArrayBuffer } from 'tubugl-core';
 import vertexShader from './components/shaders/shader-vert.glsl';
@@ -17,8 +16,6 @@ export default class App {
 		this.gl = this.canvas.getContext('webgl');
 
 		if (params.isDebug) {
-			this.stats = new Stats();
-			document.body.appendChild(this.stats.dom);
 			this._addGui();
 		} else {
 			let descId = document.getElementById('tubugl-desc');
@@ -30,8 +27,16 @@ export default class App {
 	}
 
 	_addGui() {
-		this.gui = new dat.GUI();
-		this.playAndStopGui = this.gui.add(this, '_playAndStop').name('pause');
+		const ui = new UIL.Gui({ css: 'top:0; right:0;', size: 300, center: true });
+
+		ui.add('title', { name: 'gui' });
+		ui.add('fps', { height: 30 });
+		this._button = ui.add('button', {
+			name: 'pause',
+			callback: () => {
+				this._playAndStop();
+			}
+		});
 	}
 
 	_createProgram() {
@@ -70,8 +75,6 @@ export default class App {
 	}
 
 	loop() {
-		if (this.stats) this.stats.update();
-
 		this.gl.clearColor(0, 0, 0, 1);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
@@ -113,10 +116,10 @@ export default class App {
 		this.isLoop = !this.isLoop;
 		if (this.isLoop) {
 			TweenLite.ticker.addEventListener('tick', this.loop, this);
-			this.playAndStopGui.name('pause');
+			if (this._button) this._button.label('pause');
 		} else {
 			TweenLite.ticker.removeEventListener('tick', this.loop, this);
-			this.playAndStopGui.name('play');
+			if (this._button) this._button.label('play');
 		}
 	}
 
