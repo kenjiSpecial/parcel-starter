@@ -1,5 +1,4 @@
 import {Cube, Sphere} from '../../../node_modules/tubugl-3d-shape/build/tubu-3d-shape'; // TODO: fix dependencies
-console.log(Cube);
 
 import { mat4 } from 'gl-matrix';
 
@@ -21,7 +20,7 @@ export class CustomCube extends Cube {
 		this.update(camera, directionalLight, color).draw();
 	}
 
-	update(camera, directionalLight, color) {
+	update(camera) {
 		super.update(camera);
 		let _mat4 = mat4.create();
 		mat4.invert(_mat4, this.modelMatrix);
