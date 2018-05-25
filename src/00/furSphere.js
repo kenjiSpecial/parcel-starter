@@ -1,6 +1,5 @@
-import { Sphere } from 'tubugl-3d-shape/src/sphere';
+import { Sphere } from 'tubugl-3d-shape';
 
-import { TRIANGLES, UNSIGNED_SHORT, CULL_FACE, DEPTH_TEST } from 'tubugl-constants';
 import { Program, VAO } from 'tubugl-core';
 
 const fragmentSrc = require('./shaders/shader-frag.glsl');
@@ -38,7 +37,6 @@ export class FurSphere extends Sphere {
 		this._mainVao = new VAO(this._gl);
 		this._mainVao.bind();
 
-		console.log(this._indexBuffer);
 	}
 
 	_makeProgram() {
@@ -48,8 +46,8 @@ export class FurSphere extends Sphere {
 
 	draw() {
 		let gl = this._gl;
-		this._gl.enable(CULL_FACE);
-		this._gl.enable(DEPTH_TEST);
+		this._gl.enable(this._gl.CULL_FACE);
+		this._gl.enable(this._gl.DEPTH_TEST);
 
 		this._gl.enable(this._gl.BLEND);
 		gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ZERO, gl.ONE);
@@ -57,7 +55,7 @@ export class FurSphere extends Sphere {
 		// gl.blendFunc(gl.SRC_ALPHA, gl.ONE); // too bright
 		// gl.blend(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ZERO, gl.ONE);
 
-		this._gl.drawElementsInstanced(TRIANGLES, this._cnt, UNSIGNED_SHORT, 0, this._instanced);
+		this._gl.drawElementsInstanced(gl.TRIANGLES, this._cnt, gl.UNSIGNED_SHORT, 0, this._instanced);
 
 		this._gl.disable(this._gl.BLEND);
 		return this;
@@ -94,7 +92,7 @@ export class FurSphere extends Sphere {
 		gl.cullFace(gl.BACK);
 
 		this._gl.disable(this._gl.BLEND);
-		gl.drawElements(TRIANGLES, this._cnt, UNSIGNED_SHORT, 0);
+		gl.drawElements(this._gl.TRIANGLES, this._cnt, this._gl.UNSIGNED_SHORT, 0);
 	}
 
 	update(camera, furTexture) {

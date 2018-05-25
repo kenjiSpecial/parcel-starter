@@ -1,7 +1,5 @@
-import { Cube } from 'tubugl-3d-shape/src/cube';
-
-import { TRIANGLES, UNSIGNED_SHORT, CULL_FACE, DEPTH_TEST } from 'tubugl-constants';
-import { Program, ArrayBuffer, IndexArrayBuffer, VAO } from 'tubugl-core';
+import { Cube } from 'tubugl-3d-shape';
+import { Program, VAO } from 'tubugl-core';
 
 const fragmentSrc = require('./shaders/shader-frag.glsl');
 const vertexSrc = require('./shaders/shader-vert.glsl');
@@ -35,13 +33,13 @@ export class Fur extends Cube {
 
 	draw() {
 		let gl = this._gl;
-		this._gl.disable(CULL_FACE);
-		this._gl.enable(DEPTH_TEST);
+		this._gl.disable(gl.CULL_FACE);
+		this._gl.enable(gl.DEPTH_TEST);
 
 		this._gl.enable(this._gl.BLEND);
 		gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ZERO, gl.ONE);
 
-		this._gl.drawElementsInstanced(TRIANGLES, this._cnt, UNSIGNED_SHORT, 0, this._instanced);
+		this._gl.drawElementsInstanced(gl.TRIANGLES, this._cnt, gl.UNSIGNED_SHORT, 0, this._instanced);
 
 		this._gl.disable(this._gl.BLEND);
 		return this;
