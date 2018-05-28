@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "prototype tool with parcel",
   "cjs": "build/tubu.cjs.js",
-  "esm": "build/tubu.esm.js",
+  "module": "build/tubu.esm.js",
   "main": "build/tubu.js",
   "libName": "Tubu",
   "license": "MIT",
   "scripts": {
+    "build": "rollup -c",
     "00": "parcel examples/00-example/index.html --no-hmr",
     "01": "parcel examples/01-loadingExample/index.html --no-hmr",
     "dist00": "parcel build examples/00-example/index.html -d docs/00 --public-url ./",
