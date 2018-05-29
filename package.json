@@ -25,5 +25,9 @@
     "parcel-plugin-glsl": "kenjiSpecial/parcel-plugin-glsl",
     "puppeteer": "^1.0.0",
     "stats.js": "mrdoob/stats.js"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kenjiSpecial/tubugl-debug" 
+ } 
 }
