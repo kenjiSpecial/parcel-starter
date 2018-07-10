@@ -1,16 +1,19 @@
-const TweenLite = require('gsap/src/uncompressed/TweenLite');
-const UIL = require('uil');
-const EventEmitter = require('wolfy87-eventemitter');
+import TweenLite from 'gsap/src/uncompressed/TweenLite';
+import EventEmitter from 'wolfy87-eventemitter';
+import dat from '../vendors/dat.gui.min.js';
+import Stats from '../vendors/stats';
 
 import { GridHelper } from 'tubugl-helper';
 import { PerspectiveCamera, CameraController } from 'tubugl-camera';
 import { ModelObject } from './components/object';
 import { CustomSphere, CustomCube } from './components/customShape';
 
-const baseVertexShaderSrc = require('./components/shaders/shader-vert.glsl');
-const baseFragmentShaderSrc = require('./components/shaders/shader-frag.glsl');
+import baseVertexShaderSrc from './components/shaders/shader-vert.glsl';
+import baseFragmentShaderSrc from './components/shaders/shader-frag.glsl';
 
-export default class App extends EventEmitter {
+const jsonAssetUrls = require('../assets/material-ball.json');
+
+export default class App  extends EventEmitter {
 	constructor(params = {}) {
 		super();
 		this._isMouseDown = false;
@@ -30,6 +33,8 @@ export default class App extends EventEmitter {
 
 	_setDebug() {
 		if (this._isDebug) {
+			this._stats = new Stats();
+			document.body.appendChild(this._stats.dom);
 			this._addGui();
 		} else {
 			let descId = document.getElementById('tubugl-desc');
@@ -38,16 +43,8 @@ export default class App extends EventEmitter {
 	}
 
 	_addGui() {
-		const ui = new UIL.Gui({ css: 'top:0; right:0;', size: 300, center: true });
-
-		ui.add('title', { name: 'gui' });
-		ui.add('fps', { height: 30 });
-		this._button = ui.add('button', {
-			name: 'pause',
-			callback: () => {
-				this._playAndStop();
-			}
-		});
+		this.gui = new dat.GUI();
+		this.playAndStopGui = this.gui.add(this, '_playAndStop').name('pause');
 	}
 
 	_makeCamera() {
@@ -136,8 +133,18 @@ export default class App extends EventEmitter {
 	}
 
 	startLoading() {
-		this._materaialBallData = require('../assets/material-ball.json');
-		this._onLoadAssetsDone();
+		// jsonAssetUrls
+		let xobj = new XMLHttpRequest();
+		xobj.overrideMimeType('application/json');
+		xobj.open('GET', jsonAssetUrls, true); // Replace 'my_data' with the path to your file
+		xobj.onreadystatechange = () => {
+			
+			if (xobj.readyState == 4 && xobj.status == '200') {
+				this._materaialBallData = JSON.parse(xobj.responseText);
+				this._onLoadAssetsDone();
+			}
+		};
+		xobj.send(null);
 	}
 
 	animateIn() {
@@ -193,11 +200,12 @@ export default class App extends EventEmitter {
 		this.isLoop = !this.isLoop;
 		if (this.isLoop) {
 			TweenLite.ticker.addEventListener('tick', this.loop, this);
-			if (this._button) this._button.label('pause');
+			if (this.playAndStopGui) this.playAndStopGui.name('pause');
 		} else {
 			TweenLite.ticker.removeEventListener('tick', this.loop, this);
-			if (this._button) this._button.label('play');
+			if (this.playAndStopGui) this.playAndStopGui.name('play');
 		}
+
 	}
 
 	resize(width, height) {

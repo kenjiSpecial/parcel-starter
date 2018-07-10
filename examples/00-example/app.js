@@ -1,10 +1,11 @@
 const TweenLite = require('gsap/src/uncompressed/TweenLite');
-const UIL = require('uil');
+import dat from '../vendors/dat.gui.min.js';
+import Stats from '../vendors/stats';
 
 import { Program, ArrayBuffer, IndexArrayBuffer } from 'tubugl-core';
 import vertexShader from './components/shaders/shader-vert.glsl';
 import fragmentShader from './components/shaders/shader-frag.glsl';
-import { appCall } from '../../index';
+import { appCall } from '../../src/index';
 
 export default class App {
 	constructor(params = {}) {
@@ -16,6 +17,8 @@ export default class App {
 		this.gl = this.canvas.getContext('webgl');
 
 		if (params.isDebug) {
+			this._stats = new Stats();
+			document.body.appendChild(this._stats.dom);
 			this._addGui();
 		} else {
 			let descId = document.getElementById('tubugl-desc');
@@ -27,16 +30,8 @@ export default class App {
 	}
 
 	_addGui() {
-		const ui = new UIL.Gui({ css: 'top:0; right:0;', size: 300, center: true });
-
-		ui.add('title', { name: 'gui' });
-		ui.add('fps', { height: 30 });
-		this._button = ui.add('button', {
-			name: 'pause',
-			callback: () => {
-				this._playAndStop();
-			}
-		});
+		this.gui = new dat.GUI();
+		this.playAndStopGui = this.gui.add(this, '_playAndStop').name('pause');
 	}
 
 	_createProgram() {
@@ -46,7 +41,7 @@ export default class App {
 		let vertices = new Float32Array([
 			-side / 2,
 			-side / 2,
-			side / 2,
+			side / 2,	
 			-side / 2,
 			side / 2,
 			side / 2,
@@ -75,6 +70,8 @@ export default class App {
 	}
 
 	loop() {
+		if(this._stats) this._stats.update();
+		
 		this.gl.clearColor(0, 0, 0, 1);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
@@ -116,10 +113,10 @@ export default class App {
 		this.isLoop = !this.isLoop;
 		if (this.isLoop) {
 			TweenLite.ticker.addEventListener('tick', this.loop, this);
-			if (this._button) this._button.label('pause');
+			if (this.playAndStopGui) this.playAndStopGui.name('pause');
 		} else {
 			TweenLite.ticker.removeEventListener('tick', this.loop, this);
-			if (this._button) this._button.label('play');
+			if (this.playAndStopGui) this.playAndStopGui.name('play');
 		}
 	}
 
