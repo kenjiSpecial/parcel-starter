@@ -2,15 +2,15 @@ const baseVertexShaderSrc = require('./shaders/shader-vert.glsl');
 const baseFragmentShaderSrc = require('./shaders/shader-frag.glsl');
 import { Program, ArrayBuffer, IndexArrayBuffer } from 'tubugl-core';
 import { mat4 } from 'gl-matrix';
-import {
-	TRIANGLES,
-	UNSIGNED_SHORT,
-	CULL_FACE,
-	DEPTH_TEST,
-	SRC_ALPHA,
-	ONE_MINUS_SRC_ALPHA,
-	BLEND
-} from 'tubugl-constants';
+// import {
+// 	TRIANGLES,
+// 	UNSIGNED_SHORT,
+// 	CULL_FACE,
+// 	DEPTH_TEST,
+// 	SRC_ALPHA,
+// 	ONE_MINUS_SRC_ALPHA,
+// 	BLEND
+// } from 'tubugl-constants';
 
 export class ModelObject {
 	constructor(gl, params = {}, data) {
@@ -96,7 +96,7 @@ export class ModelObject {
 
 	draw() {
 		// if (this._side === 'double') {
-		this._gl.disable(CULL_FACE);
+		this._gl.disable(this._gl.CULL_FACE);
 		// } else if (this._side === 'front') {
 		// 	this._gl.enable(CULL_FACE);
 		// 	this._gl.cullFace(BACK);
@@ -105,11 +105,11 @@ export class ModelObject {
 		// 	this._gl.cullFace(FRONT);
 		// }
 
-		this._gl.enable(DEPTH_TEST);
+		this._gl.enable(this._gl.DEPTH_TEST);
 
-		this._gl.blendFunc(SRC_ALPHA, ONE_MINUS_SRC_ALPHA);
-		this._gl.enable(BLEND);
+		this._gl.blendFunc(this._gl.SRC_ALPHA, this._gl.ONE_MINUS_SRC_ALPHA);
+		this._gl.enable(this._gl.BLEND);
 
-		this._gl.drawElements(TRIANGLES, this._cnt, UNSIGNED_SHORT, 0);
+		this._gl.drawElements(this._gl.TRIANGLES, this._cnt, this._gl.UNSIGNED_SHORT, 0);
 	}
 }

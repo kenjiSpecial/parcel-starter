@@ -18,7 +18,6 @@
     "docs": "python -m SimpleHTTPServer 8000"
   },
   "dependencies": {
-    "tubugl-constants": "^1.1.1",
     "tubugl-core": "^1.6.0",
     "wolfy87-eventemitter": "^5.2.5"
   },
