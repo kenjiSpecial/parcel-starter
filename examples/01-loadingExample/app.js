@@ -1,7 +1,7 @@
 import TweenLite from 'gsap/src/uncompressed/TweenLite';
 import EventEmitter from 'wolfy87-eventemitter';
 import dat from '../vendors/dat.gui.min.js';
-import Stats from '../vendors/stats';
+import Stats from  '../vendors/stats.min';
 
 import { GridHelper } from 'tubugl-helper';
 import { PerspectiveCamera, CameraController } from 'tubugl-camera';

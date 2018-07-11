@@ -1,6 +1,6 @@
 const TweenLite = require('gsap/src/uncompressed/TweenLite');
 import dat from '../vendors/dat.gui.min.js';
-import Stats from '../vendors/stats';
+import Stats from  '../vendors/stats.min';
 
 import { Program, ArrayBuffer, IndexArrayBuffer } from 'tubugl-core';
 import vertexShader from './components/shaders/shader-vert.glsl';
