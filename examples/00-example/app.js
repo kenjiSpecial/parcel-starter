@@ -1,6 +1,6 @@
 const TweenLite = require('gsap/src/uncompressed/TweenLite');
 import dat from '../vendors/dat.gui.min.js';
-import Stats from  '../vendors/stats.min';
+import Stats from '../vendors/stats.min';
 
 import { Program, ArrayBuffer, IndexArrayBuffer } from 'tubugl-core';
 import vertexShader from './components/shaders/shader-vert.glsl';
@@ -41,7 +41,7 @@ export default class App {
 		let vertices = new Float32Array([
 			-side / 2,
 			-side / 2,
-			side / 2,	
+			side / 2,
 			-side / 2,
 			side / 2,
 			side / 2,
@@ -70,8 +70,8 @@ export default class App {
 	}
 
 	loop() {
-		if(this._stats) this._stats.update();
-		
+		if (this._stats) this._stats.update();
+
 		this.gl.clearColor(0, 0, 0, 1);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 

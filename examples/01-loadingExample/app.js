@@ -1,7 +1,7 @@
 import TweenLite from 'gsap/src/uncompressed/TweenLite';
 import EventEmitter from 'wolfy87-eventemitter';
 import dat from '../vendors/dat.gui.min.js';
-import Stats from  '../vendors/stats.min';
+import Stats from '../vendors/stats.min';
 
 import { GridHelper } from 'tubugl-helper';
 import { PerspectiveCamera, CameraController } from 'tubugl-camera';
@@ -13,7 +13,7 @@ import baseFragmentShaderSrc from './components/shaders/shader-frag.glsl';
 
 const jsonAssetUrls = require('../assets/material-ball.json');
 
-export default class App  extends EventEmitter {
+export default class App extends EventEmitter {
 	constructor(params = {}) {
 		super();
 		this._isMouseDown = false;
@@ -49,20 +49,20 @@ export default class App  extends EventEmitter {
 
 	_makeCamera() {
 		this._camera = new PerspectiveCamera(window.innerWidth, window.innerHeight, 60, 1, 2000);
-		this._camera.position.z = 800;
-		this._camera.position.x = -800;
-		this._camera.position.y = 400;
+		this._camera.position.z = 80;
+		this._camera.position.x = -80;
+		this._camera.position.y = 40;
 		this._camera.lookAt([0, 0, 0]);
 	}
 
 	_makeCameraController() {
 		this._cameraController = new CameraController(this._camera, this.canvas);
-		this._cameraController.minDistance = 500;
-		this._cameraController.maxDistance = 1500;
+		this._cameraController.minDistance = 50;
+		this._cameraController.maxDistance = 150;
 	}
 
 	_makeHelper() {
-		let gridHelper = new GridHelper(this.gl, {}, 1000, 1000, 20, 20);
+		let gridHelper = new GridHelper(this.gl, {}, 100, 100, 20, 20);
 		this._helpers = [gridHelper];
 	}
 
@@ -72,7 +72,7 @@ export default class App  extends EventEmitter {
 	}
 
 	_makeSphere() {
-		let side = 100;
+		let side = 10;
 		this._sphere = new CustomSphere(
 			this.gl,
 			{
@@ -90,7 +90,7 @@ export default class App  extends EventEmitter {
 	}
 
 	_makeBox() {
-		let side = 200;
+		let side = 20;
 
 		this._box = new CustomCube(
 			this.gl,
@@ -138,7 +138,6 @@ export default class App  extends EventEmitter {
 		xobj.overrideMimeType('application/json');
 		xobj.open('GET', jsonAssetUrls, true); // Replace 'my_data' with the path to your file
 		xobj.onreadystatechange = () => {
-			
 			if (xobj.readyState == 4 && xobj.status == '200') {
 				this._materaialBallData = JSON.parse(xobj.responseText);
 				this._onLoadAssetsDone();
@@ -205,7 +204,6 @@ export default class App  extends EventEmitter {
 			TweenLite.ticker.removeEventListener('tick', this.loop, this);
 			if (this.playAndStopGui) this.playAndStopGui.name('play');
 		}
-
 	}
 
 	resize(width, height) {
