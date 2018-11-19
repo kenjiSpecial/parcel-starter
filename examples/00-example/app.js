@@ -1,11 +1,11 @@
 const TweenLite = require('gsap/src/uncompressed/TweenLite');
-import dat from '../vendors/dat.gui.min.js';
-import Stats from '../vendors/stats.min';
+import dat from 'dat.gui';
+import Stats from 'Stats';
+import { createProgram, createBuffer, createIndex, bindBuffer } from 'dan-shari-gl';
 
-import { Program, ArrayBuffer, IndexArrayBuffer } from 'tubugl-core';
+console.log(dat, Stats);
 import vertexShader from './components/shaders/shader-vert.glsl';
 import fragmentShader from './components/shaders/shader-frag.glsl';
-import { appCall } from '../../src/index';
 
 export default class App {
 	constructor(params = {}) {
@@ -35,7 +35,7 @@ export default class App {
 	}
 
 	_createProgram() {
-		this._program = new Program(this.gl, vertexShader, fragmentShader);
+		this.program = createProgram(this.gl, vertexShader, fragmentShader);
 
 		let side = 1.0;
 		let vertices = new Float32Array([
@@ -50,18 +50,18 @@ export default class App {
 		]);
 
 		let indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
+		const positionBuffer = createBuffer(this.gl, this.program, vertices, 'a_position');
+		const indexBuffer = createIndex(this.gl, indices);
 
-		this._arrayBuffer = new ArrayBuffer(this.gl, vertices);
-		this._arrayBuffer.setAttribs('a_position', 2, this.gl.FLOAT, false, 0, 0);
-
-		this._indexBuffer = new IndexArrayBuffer(this.gl, indices);
-
-		this._obj = {
-			program: this._program,
-			positionBuffer: this._arrayBuffer,
-			indexBuffer: this._indexBuffer,
-			count: 6
+		this.obj = {
+			program: this.program,
+			buffers: {
+				position: positionBuffer,
+				index: indexBuffer
+			}
 		};
+
+		console.log(this.obj);
 	}
 
 	animateIn() {
@@ -71,15 +71,34 @@ export default class App {
 
 	loop() {
 		if (this._stats) this._stats.update();
+		this.gl.disable(this.gl.CULL_FACE);
 
 		this.gl.clearColor(0, 0, 0, 1);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
-		this._obj.program.bind();
-		this._obj.indexBuffer.bind();
-		this._obj.positionBuffer.bind().attribPointer(this._obj.program);
+		this.gl.viewport(0, 0, window.innerWidth, innerHeight);
 
-		this.gl.drawElements(this.gl.TRIANGLES, this._obj.count, this.gl.UNSIGNED_SHORT, 0);
+		this.gl.useProgram(this.program);
+		/**
+		 *
+		 * @param {WebGLRenderingContext} gl
+		 * @param {WebGLBuffer} buffer
+		 * @param {Number} location
+		 * @param {Number} size
+		 * @param {Boolean} normalized
+		 * @param {Number} stride
+		 * @param {Number} offset
+		 */
+		// bindBuffer(this.gl, this.obj.buffers.array.buffer, 2);
+		bindBuffer(this.gl, this.obj.buffers.position.buffer, this.obj.buffers.position.location, 2); 
+		this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.obj.buffers.index.buffer);
+
+		this.gl.drawElements(
+			this.gl.TRIANGLES,
+			this.obj.buffers.index.cnt,
+			this.gl.UNSIGNED_SHORT,
+			0
+		);
 	}
 
 	animateOut() {
