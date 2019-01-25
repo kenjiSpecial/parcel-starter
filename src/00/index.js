@@ -1,12 +1,11 @@
-const THREE = require('three');
+import * as THREE from 'three';
 const OrbitControls = require('three-orbit-controls')(THREE);
 
-const dat = require('../vendors/dat.gui.min');
-// const TweenMax = require('gsap');
-import TweenMax from 'gsap/TweenMax';
-const Stats = require('stats.js');
+import dat from 'dat.gui';
+import Stats from 'stats.js';
 
 import { fragmentShader, vertexShader } from './components/shaders/shader';
+import TweenMax from 'gsap/TweenMax';
 
 export default class App {
 	constructor(params) {
