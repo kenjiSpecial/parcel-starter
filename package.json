@@ -11,10 +11,15 @@
     "dist": "python -m SimpleHTTPServer 8200"
   },
   "dependencies": {
-    "gsap": "^1.20.3",
-    "parcel-plugin-glsl": "kenjiSpecial/parcel-plugin-glsl",
-    "stats.js": "git+ssh://git@github.com:mrdoob/stats.js.git",
-    "three": "^0.88.0",
+    "dat.gui": "^0.7.5",
+    "gsap": "^2.0.2",
+    "stats": "^1.0.0",
+    "stats.js": "^0.17.0",
+    "three": "^0.100.0",
     "three-orbit-controls": "^82.1.0"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.11.0",
+    "parcel-plugin-json-url-loader": "^0.1.2"
   }
 }

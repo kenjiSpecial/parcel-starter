@@ -2,7 +2,8 @@ const THREE = require('three');
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 const dat = require('../vendors/dat.gui.min');
-const TweenMax = require('gsap');
+// const TweenMax = require('gsap');
+import TweenMax from 'gsap/TweenMax';
 const Stats = require('stats.js');
 
 import { fragmentShader, vertexShader } from './components/shaders/shader';
@@ -11,76 +12,76 @@ export default class App {
 	constructor(params) {
 		this.params = params || {};
 
-		this._makeRenderer();
-		this._makeScene();
-		this._makeCamera();
-		this._makeMesh();
+		this.makeRenderer();
+		this.makeScene();
+		this.makeCamera();
+		this.makeMesh();
 
-		if (this.params.isDebug) this._setupDebug();
+		if (this.params.isDebug) this.setupDebug();
 
-		this._makeUtils();
+		this.makeUtils();
 		this.resize();
 	}
 
-	_makeRenderer() {
-		this._renderer = new THREE.WebGLRenderer({
+	makeRenderer() {
+		this.renderer = new THREE.WebGLRenderer({
 			antialias: true
 		});
-		this.dom = this._renderer.domElement;
+		this.dom = this.renderer.domElement;
 	}
 
-	_makeScene() {
-		this._scene = new THREE.Scene();
+	makeScene() {
+		this.scene = new THREE.Scene();
 	}
 
-	_makeCamera() {
-		this._camera = new THREE.PerspectiveCamera(
+	makeCamera() {
+		this.camera = new THREE.PerspectiveCamera(
 			60,
 			window.innerWidth / window.innerHeight,
 			1,
 			10000
 		);
-		this._camera.position.z = 1000;
+		this.camera.position.z = 1000;
 	}
 
-	_makeUtils() {
-		this._clock = new THREE.Clock();
-		this._control = new OrbitControls(this._camera);
+	makeUtils() {
+		this.clock = new THREE.Clock();
+		this.control = new OrbitControls(this.camera);
 	}
 
-	_setupDebug() {
-		this._makeStats();
-		this._makeGui();
-		this._makeGrid();
+	setupDebug() {
+		this.makeStats();
+		this.makeGui();
+		this.makeGrid();
 	}
 
-	_makeStats() {
-		this._stats = new Stats();
-		document.body.appendChild(this._stats.dom);
+	makeStats() {
+		this.stats = new Stats();
+		document.body.appendChild(this.stats.dom);
 	}
 
-	_makeGui() {
-		this._gui = new dat.GUI();
-		this.playAndStopGui = this._gui.add(this, '_playAndStop').name('pause');
+	makeGui() {
+		this.gui = new dat.GUI();
+		this.playAndStopGui = this.gui.add(this, 'playAndStop').name('pause');
 	}
 
-	_makeGrid() {
+	makeGrid() {
 		var size = 1000;
 		var divisions = 20;
 
 		var gridHelper = new THREE.GridHelper(size, divisions);
-		this._scene.add(gridHelper);
+		this.scene.add(gridHelper);
 	}
 
-	_makeMesh() {
+	makeMesh() {
 		let geometry = new THREE.BoxGeometry(200, 200, 200);
 		let mat = new THREE.RawShaderMaterial({
 			vertexShader: vertexShader,
 			fragmentShader: fragmentShader
 		});
 
-		this._mesh = new THREE.Mesh(geometry, mat);
-		this._scene.add(this._mesh);
+		this.mesh = new THREE.Mesh(geometry, mat);
+		this.scene.add(this.mesh);
 	}
 
 	animateIn() {
@@ -91,11 +92,11 @@ export default class App {
 	loop() {
 		// let delta = this.clock.getDelta();
 
-		this._mesh.rotation.x += 0.01;
-		this._mesh.rotation.y += 0.02;
+		this.mesh.rotation.x += 0.01;
+		this.mesh.rotation.y += 0.02;
 
-		this._renderer.render(this._scene, this._camera);
-		if (this._stats) this._stats.update();
+		this.renderer.render(this.scene, this.camera);
+		if (this.stats) this.stats.update();
 	}
 
 	animateOut() {
@@ -107,12 +108,12 @@ export default class App {
 	onKeyDown(ev) {
 		switch (ev.which) {
 			case 27:
-				this._playAndStop();
+				this.playAndStop();
 				break;
 		}
 	}
 
-	_playAndStop() {
+	playAndStop() {
 		this.isLoop = !this.isLoop;
 		if (this.isLoop) {
 			TweenMax.ticker.addEventListener('tick', this.loop, this);
@@ -124,10 +125,10 @@ export default class App {
 	}
 
 	resize() {
-		this._camera.aspect = window.innerWidth / window.innerHeight;
-		this._camera.updateProjectionMatrix();
+		this.camera.aspect = window.innerWidth / window.innerHeight;
+		this.camera.updateProjectionMatrix();
 
-		this._renderer.setSize(window.innerWidth, window.innerHeight);
+		this.renderer.setSize(window.innerWidth, window.innerHeight);
 	}
 
 	destroy() {}
