@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "00": "parcel src/00/index.html --no-hmr",
+    "00": "parcel src/00/index.html --no-hmr --out-dir dev/00 --port 1234",
     "dist00": "parcel build recipes/00/index.html -d dist/00 --public-url ./",
     "screenshot00": "node ./node/screenshot.js --dir=app00",
     "dist": "python -m SimpleHTTPServer 8200"
