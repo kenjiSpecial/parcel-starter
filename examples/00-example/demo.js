@@ -20,7 +20,7 @@ function start() {
 }
 
 window.addEventListener('resize', function() {
-	if (app && app.resize) app.resize();
+	if (app && app.resize) app.resize(window.innerWidth, window.innerHeight);
 });
 
 window.addEventListener('keydown', function(ev) {

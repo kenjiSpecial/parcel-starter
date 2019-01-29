@@ -1,17 +1,15 @@
 const TweenLite = require('gsap/src/uncompressed/TweenLite');
 import dat from 'dat.gui';
 import Stats from 'Stats';
-import { createProgram, createBuffer, createIndex, bindBuffer } from 'dan-shari-gl';
 
-console.log(dat, Stats);
-import vertexShader from './components/shaders/shader-vert.glsl';
-import fragmentShader from './components/shaders/shader-frag.glsl';
+import { PerspectiveCamera } from 'dan-shari-gl';
+import { Sphere } from './components/sphere/sphere';
 
 export default class App {
 	constructor(params = {}) {
 		this._isMouseDown = false;
-		this._width = params.width ? params.width : window.innerWidth;
-		this._height = params.height ? params.height : window.innerHeight;
+		this.width = params.width ? params.width : window.innerWidth;
+		this.height = params.height ? params.height : window.innerHeight;
 
 		this.canvas = document.createElement('canvas');
 		this.gl = this.canvas.getContext('webgl');
@@ -19,49 +17,21 @@ export default class App {
 		if (params.isDebug) {
 			this._stats = new Stats();
 			document.body.appendChild(this._stats.dom);
-			this._addGui();
+			this.addGui();
 		} else {
 			let descId = document.getElementById('tubugl-desc');
 			descId.style.display = 'none';
 		}
 
-		this._createProgram();
-		this.resize(this._width, this._height);
+		this.resize(this.width, this.height);
+
+		this.createCamera();
+		this.createSphere();
 	}
 
-	_addGui() {
+	addGui() {
 		this.gui = new dat.GUI();
 		this.playAndStopGui = this.gui.add(this, '_playAndStop').name('pause');
-	}
-
-	_createProgram() {
-		this.program = createProgram(this.gl, vertexShader, fragmentShader);
-
-		let side = 1.0;
-		let vertices = new Float32Array([
-			-side / 2,
-			-side / 2,
-			side / 2,
-			-side / 2,
-			side / 2,
-			side / 2,
-			-side / 2,
-			side / 2
-		]);
-
-		let indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
-		const positionBuffer = createBuffer(this.gl, this.program, vertices, 'a_position');
-		const indexBuffer = createIndex(this.gl, indices);
-
-		this.obj = {
-			program: this.program,
-			buffers: {
-				position: positionBuffer,
-				index: indexBuffer
-			}
-		};
-
-		console.log(this.obj);
 	}
 
 	animateIn() {
@@ -69,36 +39,29 @@ export default class App {
 		TweenLite.ticker.addEventListener('tick', this.loop, this);
 	}
 
+	createCamera() {
+		this.camera = new PerspectiveCamera(this.width, this.height, 45, 0.1, 1000);
+		this.camera.updatePosition(0, 0, 40);
+		this.camera.updateLookAtPosition(0, 0, 0);
+		this.camera.updateViewMatrix();
+	}
+
+	createSphere() {
+		this.sphere = new Sphere(this.gl);
+	}
+
 	loop() {
 		if (this._stats) this._stats.update();
-		this.gl.disable(this.gl.CULL_FACE);
 
-		this.gl.clearColor(0, 0, 0, 1);
-		this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+		const gl = this.gl;
 
-		this.gl.viewport(0, 0, window.innerWidth, innerHeight);
+		gl.clearColor(1, 1, 1, 1);
+		gl.enable(gl.DEPTH_TEST);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		this.gl.useProgram(this.program);
-		/**
-		 *
-		 * @param {WebGLRenderingContext} gl
-		 * @param {WebGLBuffer} buffer
-		 * @param {Number} location
-		 * @param {Number} size
-		 * @param {Boolean} normalized
-		 * @param {Number} stride
-		 * @param {Number} offset
-		 */
-		// bindBuffer(this.gl, this.obj.buffers.array.buffer, 2);
-		bindBuffer(this.gl, this.obj.buffers.position.buffer, this.obj.buffers.position.location, 2); 
-		this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.obj.buffers.index.buffer);
+		gl.viewport(0, 0, this.width, this.height);
 
-		this.gl.drawElements(
-			this.gl.TRIANGLES,
-			this.obj.buffers.index.cnt,
-			this.gl.UNSIGNED_SHORT,
-			0
-		);
+		this.sphere.render(this.camera);
 	}
 
 	animateOut() {
@@ -123,12 +86,12 @@ export default class App {
 	onKeyDown(ev) {
 		switch (ev.which) {
 			case 27:
-				this._playAndStop();
+				this.playAndStop();
 				break;
 		}
 	}
 
-	_playAndStop() {
+	playAndStop() {
 		this.isLoop = !this.isLoop;
 		if (this.isLoop) {
 			TweenLite.ticker.addEventListener('tick', this.loop, this);
@@ -140,12 +103,14 @@ export default class App {
 	}
 
 	resize(width, height) {
-		this._width = width;
-		this._height = height;
+		this.width = width;
+		this.height = height;
 
-		this.canvas.width = this._width;
-		this.canvas.height = this._height;
-		this.gl.viewport(0, 0, this._width, this._height);
+		this.canvas.width = this.width;
+		this.canvas.height = this.height;
+		this.gl.viewport(0, 0, this.width, this.height);
+
+		if (this.camera) this.camera.updateAspect(this.width, this.height);
 	}
 
 	destroy() {}

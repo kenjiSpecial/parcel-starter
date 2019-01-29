@@ -14,7 +14,7 @@
     "serve": "concurrently \"http-server\" \"opn http://localhost:8080/examples\""
   },
   "dependencies": {
-    "dan-shari-gl": "^0.3.0",
+    "dan-shari-gl": "^0.3.2",
     "dat.gui": "^0.7.3",
     "gsap": "^2.0.2",
     "stats": "^1.0.0"
