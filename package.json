@@ -9,8 +9,8 @@
   "license": "MIT",
   "scripts": {
     "build": "rollup -c",
-    "00": "parcel examples/00-example/index.html --no-hmr",
-    "dist00": "parcel build examples/00-example/index.html -d examples/00 --public-url ./",
+    "00": "parcel examples/00/index.html --no-hmr --out-dir dev/00 --port 1234",
+    "dist00": "parcel build examples/00/index.html -d examples/00 --public-url ./",
     "serve": "concurrently \"http-server\" \"opn http://localhost:8080/examples\""
   },
   "dependencies": {
