@@ -1,33 +1,23 @@
-# parcel-prototype-kit
+### ts-parcel-as-lib-builder
 
-[![NPM version][npm-image]][npm-url] 
+Demonstration for functionality of Parce to create js library
 
-prototype kit with parcel
+#### setup
 
-## install
-
-To install it with yarn:
-
-```sh
-yarn add ###-###
-```
-
-## usage
-
-
-## examples
-
-https://kenjispecial.github.io/tubugl-helper/
-
-## Running the examples locally
-
-you need to install [parcel](https://github.com/parcel-bundler/parcel) to run examples locally
-
-```sh
+```bash
 yarn
-yarn run ###-###
 ```
 
-[npm-image]: https://img.shields.io/npm/v/###-###.svg?style=flat-square
-[npm-url]: https://www.npmjs.com/package/###-###
- 
+#### demo
+
+```bash
+yarn build --global FOUR # build as `FOUR` into `dist` dir
+
+# Launch Local Server at project root
+# For exmaple,
+# python -m http.server
+
+```
+
+Please note that `index.html` and `dist/index.js` are completely isolated from `src/` files, which are targetted by Parcel.
+In `index.html`, you can use your code as `FOUR` in this case.

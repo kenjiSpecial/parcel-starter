@@ -1,0 +1,33 @@
+/**
+ * This starter project recommended using Microsoft TSLint rules.
+ * Please see https://github.com/Microsoft/tslint-microsoft-contrib for more details.
+ */
+{
+	"extends": ["tslint-microsoft-contrib", "tslint-config-prettier"],
+	"rules": {
+		"missing-jsdoc": false,
+		"no-relative-imports": false,
+		"export-name": false,
+		"promise-function-async": false,
+		"no-void-expression": false,
+		"no-redundant-jsdoc": false,
+		"prefer-type-cast": false,
+		"import-name": false,
+		"strictPropertyInitialization": false,
+		"no-bitwise": false,
+		"no-reserved-keywords": false,
+		"no-inner-html": false,
+		"no-shadowed-variable": false,
+		"variable-name": false,
+		"no-null-keyword": false,
+		"forin": false,
+		"no-for-in": false,
+		"typedef": [
+			true,
+			"parameter",
+			"arrow-parameter",
+			"property-declaration",
+			"member-variable-declaration"
+		]
+	}
+}

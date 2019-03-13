@@ -1,0 +1,26 @@
+[
+	{
+		"id": "00",
+		"imgName": "00.jpg",
+		"tinyImgName": "00-tiny.jpg",
+		"date": {
+			"year": 1989,
+			"month": 1,
+			"day": 7
+		},
+		"title": "タイトル",
+		"caption": "キャプション"
+	},
+	{
+		"id": "01",
+		"imgName": "01.jpg",
+		"tinyImgName": "01-tiny.jpg",
+		"date": {
+			"year": 1989,
+			"month": 1,
+			"day": 9
+		},
+		"title": "タイトル",
+		"caption": "キャプション"
+	}
+]
