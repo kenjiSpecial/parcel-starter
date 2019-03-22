@@ -11,6 +11,7 @@
 		"lint": "tslint -t stylish --project \"tsconfig.json\""
 	},
 	"dependencies": {
+		"@types/gl-matrix": "^2.4.5",
 		"dan-shari-gl": "^1.1.8",
 		"dat.gui": "^0.7.5",
 		"gl-matrix": "^3.0.0",
@@ -27,8 +28,9 @@
 		"tslint": "^5.12.1",
 		"tslint-config-prettier": "^1.17.0",
 		"tslint-microsoft-contrib": "^6.0.0",
+		"tslint-plugin-prettier": "^2.0.1",
 		"tsutils": "^3.8.0",
 		"typedoc": "^0.14.2",
-		"typescript": "^3.2.4"
+		"typescript": "^3.3.4000"
 	}
 }

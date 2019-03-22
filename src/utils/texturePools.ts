@@ -1,4 +1,4 @@
-import { createImageTexture } from 'dan-shari-gl';
+import { createImageTexture, compileGLShader } from 'dan-shari-gl';
 import EventEmitter from 'wolfy87-eventemitter';
 
 export class TexturePools extends EventEmitter {

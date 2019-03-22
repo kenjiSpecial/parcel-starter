@@ -4,6 +4,7 @@ import dat from 'dat.gui';
 import { TweenMax } from 'gsap';
 import Stats from 'stats-js';
 
+import { Bg } from './components/bg/Bg';
 import { Sphere } from './components/sphere/sphere';
 
 export class GlView {
@@ -11,13 +12,11 @@ export class GlView {
 	public height: number;
 	public canvas: HTMLCanvasElement;
 
-	private gl: WebGLRenderingContext;
-	private stats!: Stats;
+	private readonly gl: WebGLRenderingContext;
 	private camera: PerspectiveCamera;
 	private sphere: Sphere;
-	private isLoop: boolean;
+	private bg: Bg;
 	private gui: dat.GUI;
-	private playAndStopGui: dat.GUIController;
 
 	constructor(width: number, height: number, canvas: HTMLCanvasElement, isDebug: boolean) {
 		this.width = width;
@@ -34,6 +33,7 @@ export class GlView {
 
 		this.createCamera();
 		this.createSphere();
+		this.createBg();
 	}
 
 	public resize(width: number, height: number) {
@@ -63,6 +63,8 @@ export class GlView {
 
 		gl.viewport(0, 0, this.width, this.height);
 
+		this.bg.render();
+		gl.clear(gl.DEPTH_BUFFER_BIT);
 		this.sphere.render(this.camera);
 	}
 
@@ -80,5 +82,9 @@ export class GlView {
 
 	private createSphere() {
 		this.sphere = new Sphere(this.gl);
+	}
+
+	private createBg() {
+		this.bg = new Bg(this.gl);
 	}
 }

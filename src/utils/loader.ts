@@ -1,9 +1,9 @@
-import { AppModel } from './../models/AppModel';
-import { PictureData } from './../types/data.d';
-import { JSON_LOAD_DONE, LOAD_DONE, LOAD_DONE_ALBUM_IMAGE, TRANSLATE_ALBUM } from './eventNames';
-
 import EventEmitter from 'wolfy87-eventemitter';
+
+import { AppModel } from '../models/AppModel';
+import { PictureData } from '../types/data.d';
 import { dataJsonUrl, loadAssetsFirst, loadAssetsLater, textureList } from './assetsList';
+import { JSON_LOAD_DONE, LOAD_DONE, LOAD_DONE_ALBUM_IMAGE, TRANSLATE_ALBUM } from './eventNames';
 import { TexturePools } from './TexturePools';
 
 export class Loader extends EventEmitter {
@@ -49,31 +49,6 @@ export class Loader extends EventEmitter {
 
 			this.loadassetsfirst();
 		});
-
-		// this.toLoadNum = this.toLoadNum + 1;
-
-		// getAjaxJson(coutriesUrl, (result: GeoData) => {
-		// 	this.json.countries = result;
-		// 	this.curLoadNum = this.curLoadNum + 1;
-
-		// 	if (this.curLoadNum === this.toLoadNum) {
-		// 		this.loadDone();
-		// 	}
-		// });
-
-		// for (const key in imageList) {
-		// 	this.toLoadNum = this.toLoadNum + 1;
-		// 	getImage(imageList[key], key, (id: string, result: HTMLImageElement) => {
-		// 		this.images[id] = result;
-		// 		texturePools.setImage(id, result);
-
-		// 		this.curLoadNum = this.curLoadNum + 1;
-
-		// 		if (this.curLoadNum === this.toLoadNum) {
-		// 			this.loadDone();
-		// 		}
-		// 	});
-		// }
 	}
 
 	private jsonLoadDone() {
@@ -93,6 +68,7 @@ export class Loader extends EventEmitter {
 				this.images[id] = result;
 				texturePools.setImage(id, result);
 				this.curLoadNum = this.curLoadNum + 1;
+
 				if (this.curLoadNum === this.toLoadNum) {
 					this.loadDone();
 				}
@@ -129,8 +105,8 @@ export class Loader extends EventEmitter {
 			const imgId = id;
 			const tinyImgId = `tiny${id}`;
 
-			loadAssetsFirst[imgId] = tinyImgUrl;
-			loadAssetsLater[tinyImgId] = imgUrl;
+			loadAssetsFirst[tinyImgId] = imgUrl;
+			loadAssetsLater[imgId] = imgUrl;
 			textureList.push(imgId, tinyImgId);
 		}
 	}
@@ -218,10 +194,4 @@ function loadImageWithWorker(src) {
 	});
 }
 
-// const loader = loadImageWithImageTag;
 const loader = loadImageWithWorker;
-
-// loader('https://i.imgur.com/NTBhJwl.jpg').then(img => {
-// 	const ctx = document.querySelector('canvas').getContext('2d');
-// 	ctx.drawImage(img, 0, 0, ctx.canvas.width, ctx.canvas.height);
-// });
