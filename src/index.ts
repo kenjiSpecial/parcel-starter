@@ -17,7 +17,7 @@ export class App {
 	public height: number;
 
 	private isLoop: boolean;
-	private isDebug: boolean;
+	private readonly isDebug: boolean;
 	private debugParent: HTMLElement;
 
 	private debug: Debug;
@@ -92,6 +92,7 @@ export class App {
 	private start() {
 		this.isLoop = true;
 
+		// tslint:disable-next-line: no-unsafe-any
 		TweenMax.ticker.addEventListener('tick', this.tick, this);
 	}
 
@@ -113,6 +114,7 @@ export class App {
 
 	private createDataModel() {
 		const loader: Loader = Loader.GET_INSTANCE();
+		console.log(loader);
 		this.dataModel = new DataModel(loader.json.data);
 	}
 

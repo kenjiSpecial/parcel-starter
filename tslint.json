@@ -24,6 +24,7 @@
 		"forin": false,
 		"no-for-in": false,
 		"strict-boolean-expressions": false,
+		"completed-docs": false,
 		"typedef": [
 			true,
 			"parameter",

@@ -17,6 +17,7 @@ export class GlView {
 	private sphere: Sphere;
 	private bg: Bg;
 	private gui: dat.GUI;
+	private playAndStopGui: dat.GUIController;
 
 	constructor(width: number, height: number, canvas: HTMLCanvasElement, isDebug: boolean) {
 		this.width = width;
