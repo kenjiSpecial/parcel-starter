@@ -1,17 +1,5 @@
-# gitignore
-
-node_modules
-
-# Only apps should have lockfiles
+node_modules/
+dist/
+.cache/
+build
 yarn.lock
-package-lock.json
-
-dist
-
-.idea/*
-
-.cache/*
-
-.vscode/*
-
-.history/*
