@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import store from '../store/store';
+// import store from '../store/store';
 import { firebaseConfig } from './config';
 
 let database;
@@ -22,7 +22,7 @@ export default {
 		});
 	},
 	updateCount(value) {
-		var updates = {};
+		const updates = {};
 		updates['/counter'] = value;
 		database.ref().update(updates);
 	}
