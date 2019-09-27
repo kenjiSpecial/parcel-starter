@@ -1,5 +1,5 @@
-import firebase from 'firebase';
-import { getModule } from 'vuex-module-decorators';
+import firebase from 'firebase/app';
+import 'firebase/database';
 import { counterModule } from '../store/modules/couter';
 import store from '../store/store';
 import { firebaseConfig } from './config';
@@ -28,11 +28,6 @@ export class Firebase {
 			const value = snapshot.val();
 
 			if (value) {
-				// console.log(store.state.counter.setValue());
-				// console.log(store.state.counter		;
-				// store.state.counter.setValue(value);
-				// const counter = getModule(Counter);counter
-
 				counterModule.setValue(value as number);
 			}
 		});
