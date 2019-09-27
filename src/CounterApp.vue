@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		Clicked: {{ $store.state.count }} times, count is {{ evenOrOdd }}.
+		Clicked: {{ incrementCounter }} times.
 		<button @click="increment">+</button>
 		<button @click="decrement">-</button>
 	</div>
@@ -8,24 +8,25 @@
 
 <script lang='ts'>
 import { mapGetters, mapActions } from 'vuex';
-import firebase from './firebase/firebase';
+import { Firebase } from './firebase/firebase';
 import { Component, Vue } from 'vue-property-decorator';
+import { counterModule } from './store/modules/couter';
 
 @Component
 export default class App extends Vue {
 	created() {
 		// 何か処理
+		const firebase = Firebase.GET_INSTANCE();
 		firebase.initDatabase();
 	}
 	increment() {
-		this.$store.dispatch('increment');
+		counterModule.increment()
 	}
 	decrement() {
-		this.$store.dispatch('decrement');
+		counterModule.decrement()
 	}
-	get evenOrOdd() {
-		return this.$store.getters.evenOrOdd;
+	get incrementCounter() {
+		return counterModule.counter;
 	}
 }
-
 </script>

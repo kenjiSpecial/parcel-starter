@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import App from './CounterApp.vue';
-import store from './store/store';
-// const firebase = require('./firebase/firebase');
-import firebase from './firebase/firebase';
+import { Firebase } from './firebase/firebase';
+import { store } from './store/store';
+
 Vue.config.productionTip = false;
+const firebase = Firebase.GET_INSTANCE();
 firebase.init();
 
 new Vue({
