@@ -1,23 +1,15 @@
-### ts-parcel-as-lib-builder
+# Parcel TypeScript React Example
 
-Demonstration for functionality of Parce to create js library
+Parcel supports TS out of the box!
 
-#### setup
+TypeScript support is ongoing. [Please see this issue for a collection of issues and updates](https://github.com/parcel-bundler/parcel/issues/1378)
 
-```bash
-yarn
-```
+## Further Reading
 
-#### demo
+- [TypeScript docs](https://www.typescriptlang.org/docs/home.html)
+- [Parcel Tilde Path Module Resolution with TypeScript](https://parceljs.org/module_resolution.html#typescript-~-resolution)
+- [Parcel Tilde Module Resolution with TypeScript Example](https://github.com/parcel-bundler/examples/tree/master/typescript-react-with-tilde-module-resolution)
 
-```bash
-yarn build --global FOUR # build as `FOUR` into `dist` dir
+## References
 
-# Launch Local Server at project root
-# For exmaple,
-# python -m http.server
-
-```
-
-Please note that `index.html` and `dist/index.js` are completely isolated from `src/` files, which are targetted by Parcel.
-In `index.html`, you can use your code as `FOUR` in this case.
+- https://fettblog.eu/typescript-react/components/
