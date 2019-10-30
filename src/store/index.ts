@@ -21,13 +21,9 @@ export interface State {
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const middleWares = [thunk, logger];
-// const configureStore = (initialState?: State) =>
-// 	createStore(reducer, initialState, composeEnhancers(applyMiddleware(...middleWares)));
 
 function configureStore(initialState?: State) {
 	const middleware = applyMiddleware(thunk, logger);
-
-	// const store: Store<Redux.Store.Definition> = createStore(reducer, middleware);
 	const store = createStore(
 		reducer,
 		initialState,
