@@ -5,18 +5,20 @@
   "main": "src/index.html",
   "license": "MIT",
   "scripts": {
-    "start": "parcel src/index.html --open",
+    "start": "parcel src/index.html --open --no-hmr",
     "build": "parcel build src/index.html",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch"
   },
   "dependencies": {
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
+    "axios": "^0.19.0",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
     "react-redux": "^7.1.1",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
     "tslint-config-prettier": "^1.18.0"
   },
   "devDependencies": {

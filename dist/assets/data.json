@@ -1,0 +1,14 @@
+{
+    "chapters": [
+        {"ch": 1, "sections": [
+            {"section": 1, "text": "aaa", "type": "cover"},
+            {"section": 2, "text": "bbb", "type": "map"}
+        ]},
+        {
+            "ch": 2, "sections": [
+                {"section": 1, "text": "aaa", "type": "cover"},
+                {"section": 2, "text": "bbb", "type": "map"}   
+            ]
+        }
+    ]
+}
