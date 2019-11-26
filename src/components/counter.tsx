@@ -6,36 +6,6 @@ import { store } from '../store/index';
 
 import { CounterState, incrementCounter, decrementCounter } from '../store/counter/';
 
-// interface CounterProps {
-//   readonly increment: () => void;
-//   readonly decrement: () => void;
-//   readonly count: number;
-// }
-
-// const Counter = ({ increment, decrement, count }: CounterProps) => {
-//   return (
-//     <div>
-//       <h1>Counter: {count.count}</h1>
-//       <button onClick={increment}>+</button>
-//       <button onClick={decrement}>-</button>
-//     </div>
-//   );
-// };
-
-// const mapStateToProps = (state: CounterState) => ({
-//   count: state.count
-// });
-
-// const mapDispatchToProps = (dispatch: Dispatch) => ({
-//   increment: () => dispatch(incrementCounter()),
-//   decrement: () => dispatch(decrementCounter())
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(Counter);
-
 interface IProps {
 	superhero: string;
 }
@@ -47,18 +17,18 @@ interface IState {
 export class Counter extends Component<IProps, IState> {
 	state = { health: store.getState().count.count };
 	private increment() {
-    store.dispatch(incrementCounter());
-  }
-  
-	private decrement() {
-    store.dispatch(decrementCounter());
-  }
+		store.dispatch(incrementCounter());
+	}
 
-  componentDidMount() {
-    store.subscribe(()=>{
-        this.setState({health: store.getState().count.count});
-    })
-  }
+	private decrement() {
+		store.dispatch(decrementCounter());
+	}
+
+	componentDidMount() {
+		store.subscribe(() => {
+			this.setState({ health: store.getState().count.count });
+		});
+	}
 
 	render() {
 		return (

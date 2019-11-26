@@ -12,12 +12,9 @@ body {
     'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+
+canvas{
+  display: block;
 }
 
 h1 {
