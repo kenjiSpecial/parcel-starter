@@ -1,5 +1,12 @@
 node_modules/
-dist/
+
+dist/*.html
+dist/*.js
+dist/*.js.map
+dist/*.css
+dist/*.css.map
+
 .cache/
 build
 yarn.lock
+

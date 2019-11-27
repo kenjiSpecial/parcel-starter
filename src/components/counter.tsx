@@ -29,7 +29,7 @@ export class Counter extends Component<IProps, IState> {
 			this.setState({ health: store.getState().count.count });
 		});
 	}
-
+ 
 	render() {
 		return (
 			<div>

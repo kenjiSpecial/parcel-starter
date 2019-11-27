@@ -1,0 +1,50 @@
+@import "components/mixin.scss";
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+
+html,
+body {
+  @include fullsize;
+  
+  box-sizing: border-box;
+
+  // -webkit-overflow-scrolling : touch !important;
+    // overflow: auto !important;
+    // height: 100% !important;
+}
+
+body {
+  background: white;
+  font-family: apple-system,BlinkMacSystemFont,Helvetica Neue,Hiragino Kaku Gothic ProN,Yu Gothic,YuGothic,Verdana,Meiryo,"M+ 1p",sans-serif;
+  font-size: 14px;
+  line-height: 1.6em;
+}
+
+
+canvas{
+  display: block;
+}
+
+h1 {
+  font-weight: 300;
+}
+
+#root, .container{
+  @include fullsize;
+  display: block;
+}
+
+.fullSize {
+  @include fullsize;
+}
+
+
+@import "components/text.scss";
+@import "components/gl.scss";

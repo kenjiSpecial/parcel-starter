@@ -8,6 +8,8 @@ import {
 } from 'three';
 import { GUI, GUIController } from 'dat.gui';
 import { gsap } from 'gsap';
+import { store } from '../store';
+import { updateScrollHandler } from '../store/app';
 
 export class QuntumGL {
 	private renderer: WebGLRenderer;
@@ -20,17 +22,17 @@ export class QuntumGL {
 	);
 	private gui?: GUI;
 	private isLoop: boolean = false;
-    private playAndStopGui?: GUIController;
-    private mesh: Mesh | null = null;
+	private playAndStopGui?: GUIController;
+	private mesh: Mesh | null = null;
 
-	constructor(canvas: HTMLCanvasElement, isDebug: boolean = true) {
+	constructor(canvas: HTMLCanvasElement, isDebug: boolean = false) {
 		this.loop = this.loop.bind(this);
 
 		this.renderer = new WebGLRenderer({
 			canvas: canvas,
 			antialias: true
-        });
-        this.renderer.setClearColor( 0xffffff, 1);
+		});
+		this.renderer.setClearColor(0xffffff, 1);
 		this.camera.position.z = 100;
 
 		this.createMesh();
@@ -45,12 +47,13 @@ export class QuntumGL {
 
 	private createMesh() {
 		let geometry = new BoxGeometry(20, 20, 20);
-		let mat = new MeshBasicMaterial({color: 0xffff00});
+		let mat = new MeshBasicMaterial({ color: 0xffff00 });
+		
 
 		this.mesh = new Mesh(geometry, mat);
 		(this.scene as Scene).add(this.mesh);
-    }
-    
+	}
+
 	private playAndStop() {
 		if (this.isLoop) {
 			this.pause();
@@ -61,10 +64,19 @@ export class QuntumGL {
 		}
 	}
 
+	private updatecrollChecker(){
+		const doc = document.documentElement;
+		const scrollTop = doc.scrollTop;
+
+		store.dispatch(updateScrollHandler(scrollTop))
+	}
+
 	private loop() {
-        const mesh = this.mesh as Mesh;
-        mesh.rotation.x += 0.01;
-        mesh.rotation.z += 0.01;
+		this.updatecrollChecker();
+		
+		const mesh = this.mesh as Mesh;
+		mesh.rotation.x += 0.01;
+		mesh.rotation.z += 0.01;
 		this.renderer.render(this.scene, this.camera);
 	}
 
@@ -84,7 +96,6 @@ export class QuntumGL {
 				break;
 		}
 	}
-
 
 	resize() {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
