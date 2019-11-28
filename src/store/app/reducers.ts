@@ -6,7 +6,8 @@ const initialState: AppState = {
 	isFetchData: false,
 	pageData: [],
 	pageNum: null,
-	scroll: null
+	scroll: null,
+	isDebug: false
 };
 
 const app = (state: AppState = initialState, action: AppActions): AppState => {
@@ -17,8 +18,6 @@ const app = (state: AppState = initialState, action: AppActions): AppState => {
 			return { ...state, isFetchData: false };
 		case AppActionType.UPDATE_PAGE_DATA:
 			return { ...state, pageData: action.pageData };
-		case AppActionType.UPDATE_PAGE:
-			return { ...state };
 		case AppActionType.SCROLL:
 			let scroll;
 			if (state.scroll == null) {
@@ -31,6 +30,8 @@ const app = (state: AppState = initialState, action: AppActions): AppState => {
 			return { ...state, scroll: scroll };
 		case AppActionType.UPDATE_PAGE:
 			return { ...state, pageNum: action.page };
+		case AppActionType.UPDATE_DEBUG:
+			return { ...state, isDebug: action.debug };
 		default:
 			return state;
 	}

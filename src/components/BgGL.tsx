@@ -10,7 +10,8 @@ export class BgGL extends Component {
 
 	componentDidMount() {
 		const canvas = this.refs.canvas;
-		this.app = new QuntumGL(canvas as HTMLCanvasElement, getUrlParameter('debug'));
+		
+		this.app = new QuntumGL(canvas as HTMLCanvasElement);
 
 		store.subscribe(() => {
 			const appState = store.getState().app;

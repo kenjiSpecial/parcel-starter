@@ -5,6 +5,7 @@ export interface AppState {
 	pageData: IPage[];
 	pageNum: number | null;
 	scroll: number | null;
+	isDebug: boolean;
 }
 
 export enum AppActionType {
@@ -12,7 +13,8 @@ export enum AppActionType {
 	LOADED = 'LOADED',
 	UPDATE_PAGE_DATA = 'UPDATE_PAGE_DATA',
 	UPDATE_PAGE = 'UPDATE_PAGE',
-	SCROLL = 'SCROLL'
+	SCROLL = 'SCROLL',
+	UPDATE_DEBUG = 'UPDATE_DEBUG'
 }
 
 export interface IPage {
@@ -44,9 +46,15 @@ export interface UpdateScrollAction extends Action {
 	scroll: number;
 }
 
+export interface UpdateDebugAction extends Action {
+	type: AppActionType.UPDATE_DEBUG;
+	debug: boolean;
+}
+
 export type AppActions =
 	| LoadedAction
 	| startLoadAction
 	| UpdatePageDataAction
 	| UpdatePageAction
-	| UpdateScrollAction;
+	| UpdateScrollAction
+	| UpdateDebugAction;

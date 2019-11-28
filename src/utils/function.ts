@@ -5,7 +5,6 @@ export function getUrlParameter(name: string) {
 	name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
 	var regex = new RegExp('[\\?&]' + name);
 	var results = regex.exec(location.search);
-	console.log(results);
 	return results === null ? false : true;
 }
 
@@ -22,7 +21,6 @@ export function calcHeight() {
 		const page = ii;
 		pageMarkers.push({ page, start, end });
 	}
-	console.log(pageMarkers);
 
 	store.dispatch(updatePagePositionHandler(pageMarkers));
 }

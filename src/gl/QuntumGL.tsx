@@ -24,8 +24,9 @@ export class QuntumGL {
 	private isLoop: boolean = false;
 	private playAndStopGui?: GUIController;
 	private mesh: Mesh | null = null;
+	private appState: number = 0;
 
-	constructor(canvas: HTMLCanvasElement, isDebug: boolean = false) {
+	constructor(canvas: HTMLCanvasElement) {
 		this.loop = this.loop.bind(this);
 
 		this.renderer = new WebGLRenderer({
@@ -36,19 +37,37 @@ export class QuntumGL {
 		this.camera.position.z = 100;
 
 		this.createMesh();
-		if (isDebug) this.setupDebug();
+		if (store.getState().app.isDebug) this.setupDebug();
 		this.resize();
+
+		this.subscribeStore();
+	}
+
+	private subscribeStore() {
+		const appStore = store.getState().app;
+		var prevPage = appStore.pageNum;
+
+		store.subscribe(updateStore);
+
+		const self = this;
+		function updateStore() {
+			const appState = store.getState().app.pageNum as number;
+			if (appState !== prevPage) {
+				self.appState = appState;
+				prevPage = appState;
+			}
+		}
 	}
 
 	private setupDebug() {
 		this.gui = new GUI();
 		this.playAndStopGui = this.gui.add(this, 'playAndStop').name('pause');
+		this.gui.add(this, 'appState').listen();
 	}
 
 	private createMesh() {
 		let geometry = new BoxGeometry(20, 20, 20);
 		let mat = new MeshBasicMaterial({ color: 0xffff00 });
-		
 
 		this.mesh = new Mesh(geometry, mat);
 		(this.scene as Scene).add(this.mesh);
@@ -57,23 +76,23 @@ export class QuntumGL {
 	private playAndStop() {
 		if (this.isLoop) {
 			this.pause();
-			(this.playAndStopGui as GUIController).name('pause');
+			(this.playAndStopGui as GUIController).name('play');
 		} else {
 			this.start();
-			(this.playAndStopGui as GUIController).name('play');
+			(this.playAndStopGui as GUIController).name('pause');
 		}
 	}
 
-	private updatecrollChecker(){
+	private updatecrollChecker() {
 		const doc = document.documentElement;
 		const scrollTop = doc.scrollTop;
 
-		store.dispatch(updateScrollHandler(scrollTop))
+		store.dispatch(updateScrollHandler(scrollTop));
 	}
 
 	private loop() {
 		this.updatecrollChecker();
-		
+
 		const mesh = this.mesh as Mesh;
 		mesh.rotation.x += 0.01;
 		mesh.rotation.z += 0.01;
@@ -86,7 +105,8 @@ export class QuntumGL {
 	}
 
 	public pause() {
-		gsap.ticker.add(this.loop);
+		this.isLoop = false;
+		gsap.ticker.remove(this.loop);
 	}
 
 	onKeyDown(ev: KeyboardEvent) {

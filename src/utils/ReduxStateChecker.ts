@@ -1,4 +1,5 @@
 import { store } from '../store';
+import { updatePageHandler } from '../store/app';
 
 export function checkScroll() {
 	let prevScroll = store.getState().app.scroll;
@@ -9,15 +10,13 @@ export function checkScroll() {
 		const scrollVal = appStore.scroll;
 		const pageData = appStore.pageData;
 		const pageNum = appStore.pageNum;
-		// console.log(appStore.scroll, prevScroll);
+		let curPageNum;
 
 		if (
 			prevScroll === null ||
 			pageNum === null ||
 			Math.abs((scrollVal as number) - prevScroll) > 0.01
 		) {
-			let curPageNum;
-			//
 			for (let ii = 0; ii < pageData.length * 2 - 1; ii++) {
 				if (ii % 2 == 0) {
 					const index = ii / 2;
@@ -44,11 +43,13 @@ export function checkScroll() {
 				}
 			}
 
-			if (curPageNum !== pageNum) {
-				console.log(curPageNum);
+			prevScroll = scrollVal;
+
+			curPageNum = Math.floor(curPageNum as number);
+
+			if (isNaN(curPageNum) === false && curPageNum !== pageNum) {
+				store.dispatch(updatePageHandler(curPageNum));
 			}
 		}
-
-		prevScroll = scrollVal;
 	}
 }

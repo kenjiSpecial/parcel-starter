@@ -13,7 +13,6 @@ export interface State {
 }
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
 const configureStore = (initialState?: State) => createStore(reducer, initialState);
 // createStore(reducer, initialState, composeEnhancers(applyMiddleware(logger)));
 

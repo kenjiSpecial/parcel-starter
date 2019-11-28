@@ -5,7 +5,8 @@ import {
 	UpdatePageDataAction,
 	UpdatePageAction,
 	UpdateScrollAction,
-	IPage
+	IPage,
+	UpdateDebugAction
 } from './types';
 
 export const startLoadHandler = (): startLoadAction => ({
@@ -29,4 +30,9 @@ export const updatePageHandler = (page: number): UpdatePageAction => ({
 export const updateScrollHandler = (scroll: number): UpdateScrollAction => ({
 	type: AppActionType.SCROLL,
 	scroll: scroll
+});
+
+export const updateDebugHandler = (debug: boolean): UpdateDebugAction => ({
+	type: AppActionType.UPDATE_DEBUG,
+	debug: debug
 });
