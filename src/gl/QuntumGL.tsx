@@ -94,8 +94,8 @@ export class QuntumGL {
 		this.updatecrollChecker();
 
 		const mesh = this.mesh as Mesh;
-		mesh.rotation.x += 0.01;
-		mesh.rotation.z += 0.01;
+		mesh.rotation.x += 0.01 * this.appState;
+		mesh.rotation.z += 0.01 * this.appState;
 		this.renderer.render(this.scene, this.camera);
 	}
 
