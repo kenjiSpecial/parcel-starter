@@ -1,7 +1,10 @@
 import { App } from '../src/index';
 
-main();
+const app = new App();
 
-function main() {
-	const app = new App();
+start();
+
+function start() {
+	app.start();
+	app.startToLoad();
 }

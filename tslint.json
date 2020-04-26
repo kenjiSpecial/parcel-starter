@@ -18,6 +18,7 @@
 		"prefer-readonly": false,
 		"completed-docs": false,
 		"match-default-export-name": false,
+		"strict-boolean-expressions": false,
 		"typedef": [
 			true,
 			"parameter",
