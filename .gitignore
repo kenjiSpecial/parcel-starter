@@ -1,5 +1,9 @@
 node_modules/
-dist/
+dist/*.js
+dist/*.js.*
+dist/*.html
+dist/*.css
+
 .cache/
 build
 yarn.lock
